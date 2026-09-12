@@ -24,7 +24,7 @@
 
   <!-- Classic 98.css framework and custom stylesheet -->
   <link rel="stylesheet" href="https://unpkg.com/98.css" />
-  <link rel="stylesheet" href="style.css?v=1.3.0" />
+  <link rel="stylesheet" href="style.css?v=1.4.0" />
 </head>
 <body class="desktop booting">
 
@@ -265,6 +265,156 @@
       <span>Minesweeper</span>
     </div>
   </main>
+
+  <!-- =======================================================================
+       ACTIVE DESKTOP WIDGETS (DESKTOP MODE)
+       ======================================================================= -->
+  <aside id="active-desktop-container" aria-label="Active Desktop Components">
+    
+    <!-- 1. The Iconic Internet Explorer Channel Bar -->
+    <div id="active-channel-bar" class="active-widget">
+      <div class="channel-bar-header">
+        <span class="channel-bar-title">channel</span>
+        <div class="channel-bar-controls">
+          <button class="channel-ctrl-btn" onclick="toggleChannelBar()" title="Minimize Channel Bar">_</button>
+          <button class="channel-ctrl-btn" onclick="toggleWidget('active-channel-bar')" title="Close Channel Bar">✕</button>
+        </div>
+      </div>
+      <div class="channel-bar-body" id="channel-bar-items">
+        <button class="channel-btn" onclick="openWindow('aboutMe')" title="About Me &amp; System Properties">
+          <span class="channel-icon">📰</span>
+          <span class="channel-text">PORTFOLIO</span>
+        </button>
+        <button class="channel-btn" onclick="openWindow('resume')" title="Resume &amp; Academics">
+          <span class="channel-icon">💼</span>
+          <span class="channel-text">CAREER</span>
+        </button>
+        <button class="channel-btn" onclick="openWindow('skills')" title="Skills &amp; Technologies">
+          <span class="channel-icon">⚡</span>
+          <span class="channel-text">TECH STACK</span>
+        </button>
+        <button class="channel-btn" onclick="openWindow('certifications')" title="Certifications &amp; Honors">
+          <span class="channel-icon">🏆</span>
+          <span class="channel-text">HONORS</span>
+        </button>
+        <button class="channel-btn" onclick="openWindow('contacts')" title="Contact Information">
+          <span class="channel-icon">📬</span>
+          <span class="channel-text">CONNECT</span>
+        </button>
+        <button class="channel-btn" onclick="openWindow('minesweeper')" title="Minesweeper 98">
+          <span class="channel-icon">💣</span>
+          <span class="channel-text">ARCADE 98</span>
+        </button>
+        <a class="channel-btn channel-ext" href="https://github.com/armoredglock" target="_blank" rel="noopener noreferrer" title="GitHub Profile">
+          <span class="channel-icon">🌐</span>
+          <span class="channel-text">GITHUB</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 2. System Resource Monitor (SysMon) -->
+    <div id="widget-sysmon" class="active-widget active-box">
+      <div class="active-box-header">
+        <div class="active-box-title">
+          <img src="assets/my-computer.png" alt="" class="active-box-icon" />
+          <span>System Monitor (SysMon)</span>
+        </div>
+        <button class="active-box-close" onclick="toggleWidget('widget-sysmon')" aria-label="Close widget">✕</button>
+      </div>
+      <div class="active-box-body">
+        <div class="sysmon-metric">
+          <div class="sysmon-label-row">
+            <span>CPU Load (Pentium II 350MHz):</span>
+            <span id="sysmon-cpu-val" class="sysmon-val">14%</span>
+          </div>
+          <div class="sysmon-bar-track">
+            <div id="sysmon-cpu-bar" class="sysmon-bar-fill" style="width: 14%;"></div>
+          </div>
+        </div>
+        <div class="sysmon-metric">
+          <div class="sysmon-label-row">
+            <span>Memory (128 MB SDRAM):</span>
+            <span class="sysmon-val">96 MB Free</span>
+          </div>
+          <div class="sysmon-bar-track">
+            <div class="sysmon-bar-fill mem-fill" style="width: 25%;"></div>
+          </div>
+        </div>
+        <div class="sysmon-row-stats">
+          <div class="sysmon-stat-col">
+            <span class="stat-name">User Res:</span>
+            <span class="stat-num">89% Free</span>
+          </div>
+          <div class="sysmon-stat-col">
+            <span class="stat-name">GDI Res:</span>
+            <span class="stat-num">92% Free</span>
+          </div>
+        </div>
+        <div class="sysmon-footer-row">
+          <span class="sysmon-net"><span class="net-led" id="net-rx-led"></span> VIT-LAN 100M</span>
+          <span class="sysmon-uptime" id="sysmon-uptime">Up: 00:00:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Active Desktop Calendar & Weather -->
+    <div id="widget-calendar-weather" class="active-widget active-box">
+      <div class="active-box-header">
+        <div class="active-box-title">
+          <span class="active-box-glyph">📅</span>
+          <span id="calendar-header-title">Calendar &amp; Weather</span>
+        </div>
+        <button class="active-box-close" onclick="toggleWidget('widget-calendar-weather')" aria-label="Close widget">✕</button>
+      </div>
+      <div class="active-box-body">
+        <div class="cal-widget">
+          <div class="cal-nav-row">
+            <span id="cal-month-name">September 2026</span>
+          </div>
+          <div class="cal-days-header">
+            <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+          </div>
+          <div class="cal-dates-grid" id="cal-dates-grid">
+            <!-- Dynamically populated by JS -->
+          </div>
+        </div>
+        <div class="weather-strip">
+          <div class="weather-main">
+            <span class="weather-icon">⛅</span>
+            <div class="weather-info">
+              <span class="weather-city">Vellore, IN</span>
+              <span class="weather-temp">28°C &bull; Partly Sunny</span>
+            </div>
+          </div>
+          <div class="weather-sub">Humidity: 62% &bull; Barometer: 1012 hPa</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. "Did You Know?" Tip of the Day Sticky Note -->
+    <div id="widget-tip-of-the-day" class="active-widget tip-note">
+      <div class="tip-note-pin" title="Active Desktop Sticky Note">📌</div>
+      <div class="tip-note-header">
+        <strong>💡 Did You Know?</strong>
+        <button class="tip-close-btn" onclick="toggleWidget('widget-tip-of-the-day')" aria-label="Close note">✕</button>
+      </div>
+      <div class="tip-note-content" id="tip-content">
+        Sagnik specializes in scalable backend systems, local LLM integrations, and distributed architectures at VIT Vellore.
+      </div>
+      <div class="tip-note-footer">
+        <button class="tip-cycle-btn" onclick="nextDesktopTip()">Next Tip ❯</button>
+      </div>
+    </div>
+
+    <!-- 5. Active Desktop Live Ticker Bar -->
+    <div id="widget-desktop-ticker" class="active-widget desktop-ticker">
+      <div class="ticker-badge">LIVE TICKER</div>
+      <div class="ticker-content">
+        <span class="ticker-text">⚡ VIT VELLORE B.TECH CSE (2026) ▲ &nbsp;&bull;&nbsp; FULL-STACK &amp; AI SYSTEMS ▲ &nbsp;&bull;&nbsp; FASTAPI, DOCKER &amp; PYTORCH ▲ &nbsp;&bull;&nbsp; LEETCODE ACTIVE ▲ &nbsp;&bull;&nbsp; WIN98 RETRO PORTFOLIO ONLINE ▲</span>
+      </div>
+    </div>
+
+  </aside>
 
   <!-- =======================================================================
        APPLICATION WINDOWS
@@ -533,6 +683,8 @@
        DESKTOP RIGHT-CLICK CONTEXT MENU
        ======================================================================= -->
   <div id="desktop-context-menu" role="menu">
+    <div class="context-menu-item" id="ctx-menu-activedesktop" onclick="toggleActiveDesktop()">✓ Active Desktop Widgets</div>
+    <div class="context-menu-divider"></div>
     <div class="context-menu-item" onclick="arrangeIcons()">Arrange Icons</div>
     <div class="context-menu-item" onclick="location.reload()">Refresh</div>
     <div class="context-menu-divider"></div>
@@ -662,7 +814,7 @@
   <!-- =======================================================================
        SCRIPTS
        ======================================================================= -->
-  <script src="minesweeper.js?v=1.3.0"></script>
-  <script src="script.js?v=1.3.0"></script>
+  <script src="minesweeper.js?v=1.4.0"></script>
+  <script src="script.js?v=1.4.0"></script>
 </body>
 </html>

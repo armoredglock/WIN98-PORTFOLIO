@@ -328,6 +328,504 @@ body.desktop {
 }
 
 /* ==========================================================================
+   ACTIVE DESKTOP WIDGETS (DESKTOP MODE)
+   ========================================================================== */
+
+#active-desktop-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 36px);
+  pointer-events: none;
+  z-index: 5;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body.booting #active-desktop-container {
+  display: none !important;
+}
+
+.active-widget {
+  pointer-events: auto;
+  position: absolute;
+}
+
+/* 1. Internet Explorer Channel Bar */
+#active-channel-bar {
+  right: 18px;
+  top: 18px;
+  width: 132px;
+  background: #333333;
+  border: 2px outset #ffffff;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+}
+
+.channel-bar-header {
+  background: linear-gradient(90deg, #111111, #444444);
+  color: #ffffff;
+  padding: 4px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #555555;
+}
+
+.channel-bar-title {
+  font-family: 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.channel-bar-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.channel-ctrl-btn {
+  background: #c0c0c0;
+  border: 1px outset #fff;
+  font-family: 'MS Sans Serif', Arial, sans-serif;
+  font-size: 9px;
+  font-weight: bold;
+  padding: 0 4px;
+  line-height: 12px;
+  cursor: pointer;
+}
+
+.channel-ctrl-btn:active {
+  border: 1px inset #888;
+}
+
+.channel-bar-body {
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  gap: 3px;
+  background: #2a2a2a;
+}
+
+.channel-bar-body.collapsed {
+  display: none;
+}
+
+.channel-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  background: #c0c0c0;
+  border: 2px outset #ffffff;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000000;
+  font-family: 'MS Sans Serif', Arial, sans-serif;
+  font-size: 10.5px;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.channel-btn:hover {
+  background: #d4d0c8;
+}
+
+.channel-btn:active {
+  border: 2px inset #888;
+  background: #b0b0b0;
+}
+
+.channel-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.channel-text {
+  white-space: nowrap;
+}
+
+/* 2 & 3. Active Box Component (SysMon & Calendar) */
+.active-box {
+  background: #c0c0c0;
+  border: 2px outset #ffffff;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  font-family: 'MS Sans Serif', Arial, sans-serif;
+}
+
+.active-box-header {
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #ffffff;
+  padding: 3px 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.active-box-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.active-box-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.active-box-glyph {
+  font-size: 12px;
+}
+
+.active-box-close {
+  background: #c0c0c0;
+  border: 1px outset #ffffff;
+  font-size: 9px;
+  font-weight: bold;
+  padding: 0 4px;
+  cursor: pointer;
+  line-height: 12px;
+}
+
+.active-box-close:active {
+  border: 1px inset #888;
+}
+
+.active-box-body {
+  padding: 8px;
+}
+
+/* SysMon Specifics */
+#widget-sysmon {
+  right: 162px;
+  top: 18px;
+  width: 246px;
+}
+
+.sysmon-metric {
+  margin-bottom: 7px;
+}
+
+.sysmon-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  color: #000;
+  margin-bottom: 2px;
+}
+
+.sysmon-val {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  color: #000080;
+}
+
+.sysmon-bar-track {
+  height: 14px;
+  background: #001800;
+  border: 2px inset #808080;
+  padding: 1px;
+  box-sizing: border-box;
+}
+
+.sysmon-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00aa00, #00ff00);
+  transition: width 0.35s ease-out;
+  box-shadow: 0 0 4px #00ff00;
+}
+
+.sysmon-bar-fill.mem-fill {
+  background: linear-gradient(90deg, #0000aa, #0055ff);
+  box-shadow: 0 0 4px #0055ff;
+}
+
+.sysmon-row-stats {
+  display: flex;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 2px inset #808080;
+  padding: 3px 6px;
+  margin-bottom: 6px;
+  font-size: 10px;
+}
+
+.stat-name {
+  color: #444;
+}
+
+.stat-num {
+  font-weight: bold;
+  color: #000080;
+}
+
+.sysmon-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  color: #333;
+}
+
+.net-led {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00ff00;
+  border: 1px solid #005500;
+  box-shadow: 0 0 4px #00ff00;
+  margin-right: 2px;
+}
+
+.net-led.blink-off {
+  background: #004400;
+  box-shadow: none;
+}
+
+.sysmon-uptime {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  color: #222;
+}
+
+/* Calendar & Weather Specifics */
+#widget-calendar-weather {
+  right: 162px;
+  top: 198px;
+  width: 246px;
+}
+
+.cal-widget {
+  background: #ffffff;
+  border: 2px inset #808080;
+  padding: 4px;
+  margin-bottom: 6px;
+}
+
+.cal-nav-row {
+  text-align: center;
+  font-size: 11px;
+  font-weight: bold;
+  color: #000080;
+  padding: 2px 0 4px 0;
+  border-bottom: 1px solid #d4d0c8;
+}
+
+.cal-days-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 9.5px;
+  font-weight: bold;
+  color: #555;
+  padding: 3px 0;
+}
+
+.cal-dates-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  gap: 1px;
+}
+
+.cal-date-cell {
+  font-size: 10.5px;
+  padding: 2px 0;
+  line-height: 14px;
+}
+
+.cal-date-cell.empty {
+  visibility: hidden;
+}
+
+.cal-date-cell.today {
+  background: #000080;
+  color: #ffffff;
+  font-weight: bold;
+  outline: 1px dotted #ffffff;
+}
+
+.weather-strip {
+  background: #ffffff;
+  border: 2px inset #808080;
+  padding: 4px 8px;
+}
+
+.weather-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weather-icon {
+  font-size: 18px;
+}
+
+.weather-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.weather-city {
+  font-size: 11px;
+  font-weight: bold;
+  color: #000;
+}
+
+.weather-temp {
+  font-size: 10px;
+  color: #000080;
+}
+
+.weather-sub {
+  font-size: 9px;
+  color: #555;
+  margin-top: 2px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 2px;
+}
+
+/* 4. Tip of the Day Sticky Note */
+#widget-tip-of-the-day {
+  right: 162px;
+  top: 410px;
+  width: 246px;
+}
+
+.tip-note {
+  background: #ffffcc;
+  border: 2px outset #f0e68c;
+  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.35);
+  padding: 8px 10px;
+  position: absolute;
+  font-family: 'Comic Sans MS', 'MS Sans Serif', Arial, sans-serif;
+}
+
+.tip-note-pin {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.4));
+}
+
+.tip-note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed #d0c070;
+  padding-bottom: 3px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  color: #665500;
+}
+
+.tip-close-btn {
+  background: none;
+  border: none;
+  font-size: 9px;
+  cursor: pointer;
+  color: #887700;
+  font-weight: bold;
+}
+
+.tip-close-btn:hover {
+  color: #000;
+}
+
+.tip-note-content {
+  font-size: 11px;
+  color: #222200;
+  line-height: 1.35;
+  min-height: 48px;
+}
+
+.tip-note-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.tip-cycle-btn {
+  background: #f7f0b8;
+  border: 1px outset #fff;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 8px;
+  cursor: pointer;
+  color: #443300;
+}
+
+.tip-cycle-btn:active {
+  border: 1px inset #888;
+}
+
+/* 5. Active Desktop Live Ticker Bar */
+#widget-desktop-ticker {
+  left: 110px;
+  right: 430px;
+  bottom: 14px;
+  height: 24px;
+}
+
+.desktop-ticker {
+  display: flex;
+  align-items: center;
+  background: #c0c0c0;
+  border: 2px inset #ffffff;
+  overflow: hidden;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+}
+
+.ticker-badge {
+  background: #000080;
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: bold;
+  padding: 2px 6px;
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+  font-family: 'MS Sans Serif', Arial, sans-serif;
+}
+
+.ticker-content {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker-text {
+  display: inline-block;
+  padding-left: 100%;
+  animation: tickerMarquee 26s linear infinite;
+  font-size: 11px;
+  font-weight: bold;
+  color: #000080;
+  font-family: 'MS Sans Serif', Arial, sans-serif;
+}
+
+@keyframes tickerMarquee {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
+}
+
+@media (max-width: 1180px) {
+  #widget-desktop-ticker {
+    display: none;
+  }
+}
+
+/* ==========================================================================
    WINDOWS & WINDOW MANAGER (RESIZABLE & CENTERED)
    ========================================================================== */
 
@@ -1061,11 +1559,9 @@ body.booting #mobile-tabs-switcher {
   }
 
   /* Hide Desktop-Only Chrome */
-  .taskbar {
-    display: none !important;
-  }
-
-  .start-menu {
+  .taskbar,
+  .start-menu,
+  #active-desktop-container {
     display: none !important;
   }
 

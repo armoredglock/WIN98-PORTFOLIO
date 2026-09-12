@@ -1013,6 +1013,134 @@ function initMobileGestures() {
 }
 
 /* ==========================================================================
+   ACTIVE DESKTOP WIDGETS (DESKTOP MODE)
+   ========================================================================== */
+
+let sessionStartTime = Date.now();
+let activeDesktopVisible = true;
+
+const desktopTips = [
+  "Sagnik is a CS undergraduate at VIT Vellore specializing in scalable backend systems, local LLMs, and distributed architectures.",
+  "Double-click any desktop icon or use the Start menu in the bottom-left to explore Sagnik's resume, technical skills, and projects.",
+  "Try the Minesweeper game in the Arcade! It features authentic sound effects, touch flagging, and retro win/lose banners.",
+  "Right-click anywhere on the desktop wallpaper to toggle Active Desktop widgets, CRT scanline effects, or sound effects.",
+  "Easter Egg: Press 'DELETE' on your keyboard during computer bootup to enter the authentic ROM BIOS Setup Utility!",
+  "You can drag any open window around the screen using its blue titlebar, just like on an authentic Windows 98 PC."
+];
+let currentTipIndex = 0;
+
+function initActiveDesktop() {
+  buildActiveCalendar();
+  updateSysMon();
+  setInterval(updateSysMon, 1200);
+}
+
+function buildActiveCalendar() {
+  const grid = document.getElementById('cal-dates-grid');
+  const title = document.getElementById('cal-month-name');
+  if (!grid || !title) return;
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const today = now.getDate();
+
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  title.textContent = `${monthNames[month]} ${year}`;
+
+  grid.innerHTML = '';
+  const firstDay = new Date(year, month, 1).getDay();
+  const totalDays = new Date(year, month + 1, 0).getDate();
+
+  for (let i = 0; i < firstDay; i++) {
+    const emptyCell = document.createElement('div');
+    emptyCell.className = 'cal-date-cell empty';
+    grid.appendChild(emptyCell);
+  }
+
+  for (let day = 1; day <= totalDays; day++) {
+    const cell = document.createElement('div');
+    cell.className = 'cal-date-cell';
+    if (day === today) {
+      cell.classList.add('today');
+    }
+    cell.textContent = day;
+    grid.appendChild(cell);
+  }
+}
+
+function updateSysMon() {
+  const cpuVal = document.getElementById('sysmon-cpu-val');
+  const cpuBar = document.getElementById('sysmon-cpu-bar');
+  const led = document.getElementById('net-rx-led');
+  const uptimeEl = document.getElementById('sysmon-uptime');
+
+  if (cpuVal && cpuBar) {
+    const randomLoad = Math.floor(Math.random() * 17) + 8; // 8% - 24%
+    cpuVal.textContent = `${randomLoad}%`;
+    cpuBar.style.width = `${randomLoad}%`;
+  }
+
+  if (led) {
+    led.classList.toggle('blink-off', Math.random() > 0.45);
+  }
+
+  if (uptimeEl) {
+    const elapsedSec = Math.floor((Date.now() - sessionStartTime) / 1000);
+    const h = String(Math.floor(elapsedSec / 3600)).padStart(2, '0');
+    const m = String(Math.floor((elapsedSec % 3600) / 60)).padStart(2, '0');
+    const s = String(elapsedSec % 60).padStart(2, '0');
+    uptimeEl.textContent = `Up: ${h}:${m}:${s}`;
+  }
+}
+
+function nextDesktopTip() {
+  currentTipIndex = (currentTipIndex + 1) % desktopTips.length;
+  const el = document.getElementById('tip-content');
+  if (el) {
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.textContent = desktopTips[currentTipIndex];
+      el.style.opacity = '1';
+    }, 120);
+  }
+  playClickSound();
+}
+
+function toggleChannelBar() {
+  const items = document.getElementById('channel-bar-items');
+  if (items) {
+    items.classList.toggle('collapsed');
+    playClickSound();
+  }
+}
+
+function toggleWidget(id) {
+  const widget = document.getElementById(id);
+  if (widget) {
+    const isHidden = (widget.style.display === 'none');
+    widget.style.display = isHidden ? '' : 'none';
+    playClickSound();
+  }
+}
+
+function toggleActiveDesktop() {
+  const container = document.getElementById('active-desktop-container');
+  const menuCheck = document.getElementById('ctx-menu-activedesktop');
+  if (!container) return;
+
+  activeDesktopVisible = !activeDesktopVisible;
+  container.style.display = activeDesktopVisible ? '' : 'none';
+  if (menuCheck) {
+    menuCheck.textContent = activeDesktopVisible ? '✓ Active Desktop Widgets' : '  Active Desktop Widgets';
+  }
+  playClickSound();
+}
+
+/* ==========================================================================
    INITIALIZATION
    ========================================================================== */
 
@@ -1021,6 +1149,7 @@ window.addEventListener('DOMContentLoaded', () => {
   initDesktopIcons();
   initDesktopContextMenu();
   initMobileGestures();
+  initActiveDesktop();
   updateClock();
   setInterval(updateClock, 1000);
   startBootSequence();
