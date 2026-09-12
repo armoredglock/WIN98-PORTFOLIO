@@ -87,6 +87,10 @@ function openWindow(id) {
   const win = document.getElementById(id);
   if (!win) return;
 
+  if (window.innerWidth <= 768) {
+    closeAppDrawer();
+  }
+
   const isFirstOpen = (win.style.display === 'none' || win.style.display === '');
   win.style.display = 'flex';
   win.classList.remove('minimized');
@@ -324,14 +328,24 @@ function updateTaskbar() {
 
 function updateClock() {
   const clock = document.getElementById('taskbar-clock');
-  if (!clock) return;
+  const mobileClock = document.getElementById('mobile-clock');
+  const dateWidget = document.getElementById('mobile-widget-date');
+
   const now = new Date();
   let h = now.getHours();
   let m = now.getMinutes();
   const ampm = h >= 12 ? 'PM' : 'AM';
   h = h % 12 || 12;
   if (m < 10) m = '0' + m;
-  clock.textContent = `${h}:${m} ${ampm}`;
+  const timeStr = `${h}:${m} ${ampm}`;
+
+  if (clock) clock.textContent = timeStr;
+  if (mobileClock) mobileClock.textContent = timeStr;
+
+  if (dateWidget) {
+    const options = { weekday: 'long', month: 'long', day: 'numeric' };
+    dateWidget.textContent = now.toLocaleDateString(undefined, options);
+  }
 }
 
 /* ==========================================================================
@@ -598,7 +612,14 @@ function initDesktopIcons() {
       icon.classList.add('selected');
       e.stopPropagation();
 
-      // Mobile double-tap support
+      // On mobile screens (<=768px), single tap immediately opens the window
+      if (window.innerWidth <= 768) {
+        const action = icon.getAttribute('data-window');
+        if (action) openWindow(action);
+        return;
+      }
+
+      // On desktop, support double-click and quick double-tap
       const now = new Date().getTime();
       const diff = now - lastTap;
       if (diff < 350 && diff > 0) {
@@ -622,6 +643,120 @@ function initDesktopIcons() {
 }
 
 /* ==========================================================================
+   MOBILE OS: TOUCH GESTURES, APP DRAWER & NAVIGATION
+   ========================================================================== */
+
+function openAppDrawer() {
+  const drawer = document.getElementById('mobile-app-drawer');
+  if (drawer) {
+    drawer.classList.add('open');
+    playClickSound();
+  }
+}
+
+function closeAppDrawer() {
+  const drawer = document.getElementById('mobile-app-drawer');
+  if (drawer) {
+    drawer.classList.remove('open');
+  }
+}
+
+function toggleAppDrawer() {
+  const drawer = document.getElementById('mobile-app-drawer');
+  if (drawer) {
+    const isOpen = drawer.classList.contains('open');
+    if (isOpen) closeAppDrawer();
+    else openAppDrawer();
+  }
+}
+
+function filterDrawerApps(query) {
+  const q = (query || '').toLowerCase().trim();
+  const items = document.querySelectorAll('.drawer-app-item');
+  items.forEach(item => {
+    const title = item.querySelector('.drawer-app-title')?.textContent.toLowerCase() || '';
+    const desc = item.querySelector('.drawer-app-desc')?.textContent.toLowerCase() || '';
+    if (title.includes(q) || desc.includes(q)) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+function goHome() {
+  closeAppDrawer();
+  windowOrder.forEach(id => {
+    const w = document.getElementById(id);
+    if (w) w.style.display = 'none';
+    minimizedWindows[id] = false;
+  });
+  activeWindowId = null;
+  updateTaskbar();
+  playClickSound();
+}
+
+function goBack() {
+  const drawer = document.getElementById('mobile-app-drawer');
+  if (drawer && drawer.classList.contains('open')) {
+    closeAppDrawer();
+    playClickSound();
+    return;
+  }
+  if (activeWindowId) {
+    closeWindow(activeWindowId);
+  } else {
+    playClickSound();
+  }
+}
+
+function initMobileGestures() {
+  let touchStartY = 0;
+  let touchStartX = 0;
+  let isSwiping = false;
+
+  document.addEventListener('touchstart', (e) => {
+    if (window.innerWidth > 768) return;
+    if (e.touches.length === 1) {
+      touchStartY = e.touches[0].clientY;
+      touchStartX = e.touches[0].clientX;
+      isSwiping = true;
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    if (!isSwiping || window.innerWidth > 768) return;
+    isSwiping = false;
+
+    if (e.changedTouches.length > 0) {
+      const touchEndY = e.changedTouches[0].clientY;
+      const touchEndX = e.changedTouches[0].clientX;
+      const diffY = touchStartY - touchEndY;
+      const diffX = Math.abs(touchStartX - touchEndX);
+
+      // Verify predominantly vertical swipe
+      if (Math.abs(diffY) > 50 && Math.abs(diffY) > diffX) {
+        if (diffY > 50) {
+          // Swipe UP - Open drawer if touch started from lower 65% of screen
+          const drawer = document.getElementById('mobile-app-drawer');
+          if (drawer && !drawer.classList.contains('open')) {
+            if (touchStartY > window.innerHeight * 0.35) {
+              openAppDrawer();
+            }
+          }
+        } else if (diffY < -50) {
+          // Swipe DOWN - Close drawer
+          const drawer = document.getElementById('mobile-app-drawer');
+          if (drawer && drawer.classList.contains('open')) {
+            closeAppDrawer();
+          }
+        }
+      }
+    }
+  }, { passive: true });
+}
+
+/* ==========================================================================
    INITIALIZATION
    ========================================================================== */
 
@@ -629,6 +764,7 @@ window.addEventListener('DOMContentLoaded', () => {
   initWindowDragging();
   initDesktopIcons();
   initDesktopContextMenu();
+  initMobileGestures();
   updateClock();
   setInterval(updateClock, 1000);
   startBootSequence();

@@ -29,6 +29,23 @@
 <body class="desktop">
 
   <!-- =======================================================================
+       MOBILE RETRO STATUS BAR (Visible only on mobile screens)
+       ======================================================================= -->
+  <header id="mobile-status-bar" role="banner">
+    <div class="mobile-status-left">
+      <span class="mobile-signal">📶</span>
+      <span class="mobile-carrier">Win98 4G</span>
+    </div>
+    <div class="mobile-status-center">
+      <span id="mobile-clock">12:00 PM</span>
+    </div>
+    <div class="mobile-status-right">
+      <span class="mobile-sound-icon" onclick="toggleAudio()" title="Sound Toggle">🔊</span>
+      <span class="mobile-battery">🔋 98%</span>
+    </div>
+  </header>
+
+  <!-- =======================================================================
        BIOS SETUP UTILITY (EASTER EGG - PRESS 'DELETE' DURING BOOT)
        ======================================================================= -->
   <div id="bios-popup" role="dialog" aria-modal="true" aria-label="BIOS Setup Utility">
@@ -117,6 +134,13 @@
         <div id="login-error" class="login-error"></div>
       </div>
     </div>
+  </div>
+
+  <!-- Mobile Homescreen Welcome & Date Widget (Mobile Only) -->
+  <div id="mobile-home-widget">
+    <div class="mobile-widget-date" id="mobile-widget-date">Saturday, September 12</div>
+    <div class="mobile-widget-user">Sagnik Datta</div>
+    <div class="mobile-widget-sub">B.Tech CSE &bull; VIT Vellore</div>
   </div>
 
   <!-- =======================================================================
@@ -452,6 +476,89 @@
       <div class="taskbar-clock" id="taskbar-clock" aria-label="System Clock">12:00 PM</div>
     </div>
   </footer>
+
+  <!-- =======================================================================
+       MOBILE APP DRAWER (SWIPE UP / SWIPE DOWN)
+       ======================================================================= -->
+  <div id="mobile-app-drawer" role="dialog" aria-modal="true" aria-label="Applications Drawer">
+    <div id="drawer-handle" onclick="toggleAppDrawer()">
+      <div class="drawer-pill"></div>
+      <span class="drawer-handle-text">▲ All Applications</span>
+    </div>
+    <div class="drawer-content">
+      <div class="drawer-search-bar">
+        <input type="text" id="drawer-search" placeholder="Search apps &amp; tools..." oninput="filterDrawerApps(this.value)" autocomplete="off" />
+      </div>
+      <div class="drawer-apps-list" id="drawer-apps-list">
+        <div class="drawer-app-item" onclick="openWindow('aboutMe'); closeAppDrawer();">
+          <img src="assets/my-computer.png" alt="" />
+          <div class="drawer-app-info">
+            <span class="drawer-app-title">About Me</span>
+            <span class="drawer-app-desc">Bio, engineering background &amp; interests</span>
+          </div>
+        </div>
+        <div class="drawer-app-item" onclick="openWindow('resume'); closeAppDrawer();">
+          <img src="assets/resume.png" alt="" />
+          <div class="drawer-app-info">
+            <span class="drawer-app-title">Resume</span>
+            <span class="drawer-app-desc">PDF document preview &amp; download</span>
+          </div>
+        </div>
+        <div class="drawer-app-item" onclick="openWindow('skills'); closeAppDrawer();">
+          <img src="assets/skills.png" alt="" />
+          <div class="drawer-app-info">
+            <span class="drawer-app-title">Skills</span>
+            <span class="drawer-app-desc">Languages, full-stack, AI/ML &amp; cloud</span>
+          </div>
+        </div>
+        <div class="drawer-app-item" onclick="openWindow('certifications'); closeAppDrawer();">
+          <img src="assets/certifications.png" alt="" />
+          <div class="drawer-app-info">
+            <span class="drawer-app-title">Certifications</span>
+            <span class="drawer-app-desc">Electronic Arts, HackerRank, AI badges</span>
+          </div>
+        </div>
+        <div class="drawer-app-item" onclick="openWindow('contacts'); closeAppDrawer();">
+          <img src="assets/contacts.png" alt="" />
+          <div class="drawer-app-info">
+            <span class="drawer-app-title">Contacts</span>
+            <span class="drawer-app-desc">Email, GitHub profile, LinkedIn</span>
+          </div>
+        </div>
+        <div class="drawer-app-item" onclick="openWindow('minesweeper'); closeAppDrawer();">
+          <img src="assets/minesweeper.png" alt="" />
+          <div class="drawer-app-info">
+            <span class="drawer-app-title">Minesweeper</span>
+            <span class="drawer-app-desc">Classic Windows 98 puzzle game</span>
+          </div>
+        </div>
+      </div>
+      <div class="drawer-quick-actions">
+        <button class="drawer-action-btn" onclick="toggleCRT(); closeAppDrawer();">📺 CRT</button>
+        <button class="drawer-action-btn" onclick="toggleAudio();">🔊 Audio</button>
+        <button class="drawer-action-btn" onclick="rebootPC(); closeAppDrawer();">🔄 Restart</button>
+        <button class="drawer-action-btn" onclick="lockPC(); closeAppDrawer();">🔒 Lock</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MOBILE BOTTOM NAVIGATION BAR
+       ======================================================================= -->
+  <nav id="mobile-nav-bar" role="navigation" aria-label="Mobile Navigation">
+    <button class="mobile-nav-btn" onclick="goBack()" title="Back" aria-label="Back">
+      <span class="nav-icon">◀</span>
+      <span class="nav-label">Back</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="goHome()" title="Home" aria-label="Home">
+      <span class="nav-icon">⌂</span>
+      <span class="nav-label">Home</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="toggleAppDrawer()" title="App Drawer" aria-label="App Drawer">
+      <span class="nav-icon">▲</span>
+      <span class="nav-label">Apps</span>
+    </button>
+  </nav>
 
   <!-- =======================================================================
        SCRIPTS
