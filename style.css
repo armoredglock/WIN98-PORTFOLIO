@@ -770,61 +770,6 @@ body.booting #active-desktop-container {
   border: 1px inset #888;
 }
 
-/* 5. Active Desktop Live Ticker Bar */
-#widget-desktop-ticker {
-  left: 110px;
-  right: 430px;
-  bottom: 14px;
-  height: 24px;
-}
-
-.desktop-ticker {
-  display: flex;
-  align-items: center;
-  background: #c0c0c0;
-  border: 2px inset #ffffff;
-  overflow: hidden;
-  box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-}
-
-.ticker-badge {
-  background: #000080;
-  color: #ffffff;
-  font-size: 9.5px;
-  font-weight: bold;
-  padding: 2px 6px;
-  flex-shrink: 0;
-  letter-spacing: 0.5px;
-  font-family: 'MS Sans Serif', Arial, sans-serif;
-}
-
-.ticker-content {
-  flex: 1;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.ticker-text {
-  display: inline-block;
-  padding-left: 100%;
-  animation: tickerMarquee 26s linear infinite;
-  font-size: 11px;
-  font-weight: bold;
-  color: #000080;
-  font-family: 'MS Sans Serif', Arial, sans-serif;
-}
-
-@keyframes tickerMarquee {
-  0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(-100%, 0, 0); }
-}
-
-@media (max-width: 1180px) {
-  #widget-desktop-ticker {
-    display: none;
-  }
-}
-
 /* ==========================================================================
    WINDOWS & WINDOW MANAGER (RESIZABLE & CENTERED)
    ========================================================================== */
@@ -1366,27 +1311,45 @@ body.booting #active-desktop-container {
 .taskbar-tray {
   display: flex;
   align-items: center;
-  gap: 8px;
-  border: 2px inset #888;
+  gap: 3px;
+  border: 2px inset #808080;
   height: 26px;
-  padding: 0 8px;
+  padding: 0 4px;
   background: #c0c0c0;
   flex-shrink: 0;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .tray-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 13px;
-  padding: 1px 2px;
-  display: flex;
-  align-items: center;
-  line-height: 1;
+  min-width: unset !important;
+  min-height: unset !important;
+  width: 20px !important;
+  height: 20px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  font-size: 11.5px !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+  color: #000 !important;
+  box-sizing: border-box !important;
 }
 
 .tray-btn:hover {
-  outline: 1px dotted #000;
+  border: 1px outset #ffffff !important;
+  background: #d4d0c8 !important;
+}
+
+.tray-btn:active, .tray-btn.tray-active {
+  border: 1px inset #808080 !important;
+  background: #b4b0a8 !important;
 }
 
 .taskbar-clock {
@@ -1394,6 +1357,236 @@ body.booting #active-desktop-container {
   font-size: 11px;
   color: #000;
   user-select: none;
+  padding: 0 4px;
+  cursor: pointer;
+}
+
+.taskbar-clock:hover {
+  background: #000080;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   DESKTOP CONTROL CENTER POPUP
+   ========================================================================== */
+
+#desktop-control-center {
+  display: none;
+  position: fixed;
+  right: 4px;
+  bottom: 34px;
+  width: 290px;
+  background: #c0c0c0;
+  border: 2px outset #ffffff;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  z-index: 100004;
+  flex-direction: column;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: 'MS Sans Serif', Arial, sans-serif;
+  animation: ccSlideUp 0.18s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes ccSlideUp {
+  0% { transform: translateY(12px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.desktop-cc-titlebar {
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #ffffff;
+  padding: 3px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.desktop-cc-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.desktop-cc-title img {
+  width: 14px;
+  height: 14px;
+}
+
+.desktop-cc-close {
+  min-width: unset !important;
+  min-height: unset !important;
+  width: 16px !important;
+  height: 14px !important;
+  padding: 0 !important;
+  font-size: 9px !important;
+  font-weight: bold !important;
+  line-height: 12px !important;
+  background: #c0c0c0 !important;
+  border: 1px outset #ffffff !important;
+  cursor: pointer !important;
+}
+
+.desktop-cc-close:active {
+  border: 1px inset #808080 !important;
+}
+
+.desktop-cc-body {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.desktop-cc-user-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 2px inset #808080;
+  padding: 6px 8px;
+}
+
+.desktop-cc-avatar {
+  width: 28px;
+  height: 28px;
+  background: #000080;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.desktop-cc-user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.desktop-cc-user-info strong {
+  font-size: 11.5px;
+  color: #000;
+}
+
+.desktop-cc-user-info span {
+  font-size: 10px;
+  color: #555;
+}
+
+.desktop-cc-power-btns {
+  display: flex;
+  gap: 4px;
+}
+
+.desktop-cc-mini-btn {
+  min-width: unset !important;
+  min-height: unset !important;
+  width: 22px !important;
+  height: 22px !important;
+  padding: 0 !important;
+  background: #c0c0c0 !important;
+  border: 2px outset #ffffff !important;
+  font-size: 11px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.desktop-cc-mini-btn:active {
+  border: 2px inset #808080 !important;
+  background: #b0b0b0 !important;
+}
+
+.desktop-cc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.desktop-cc-tile {
+  min-width: unset !important;
+  min-height: unset !important;
+  width: 100% !important;
+  height: 60px !important;
+  background: #c0c0c0 !important;
+  border: 2px outset #ffffff !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 4px !important;
+  cursor: pointer !important;
+  gap: 1px !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+}
+
+.desktop-cc-tile:active {
+  border: 2px inset #808080 !important;
+}
+
+.desktop-cc-tile.active {
+  background: #d4e0f0 !important;
+  border: 2px inset #808080 !important;
+}
+
+.dcc-tile-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.dcc-tile-label {
+  font-size: 10px;
+  font-weight: bold;
+  color: #000;
+  white-space: nowrap;
+}
+
+.dcc-tile-status {
+  font-size: 9px;
+  color: #000080;
+}
+
+.desktop-cc-tile:not(.active) .dcc-tile-status {
+  color: #777;
+}
+
+.desktop-cc-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.desktop-cc-btn {
+  flex: 1;
+  min-width: unset !important;
+  height: 24px !important;
+  background: #c0c0c0 !important;
+  border: 2px outset #ffffff !important;
+  font-size: 10.5px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  font-family: 'MS Sans Serif', Arial, sans-serif !important;
+  padding: 2px 4px !important;
+}
+
+.desktop-cc-btn:active {
+  border: 2px inset #808080 !important;
+}
+
+.desktop-cc-footer {
+  background: #e8e8e8;
+  border: 1px inset #a0a0a0;
+  padding: 3px 6px;
+  font-size: 9px;
+  color: #333;
+  text-align: center;
 }
 
 /* ==========================================================================
@@ -1561,7 +1754,8 @@ body.booting #mobile-tabs-switcher {
   /* Hide Desktop-Only Chrome */
   .taskbar,
   .start-menu,
-  #active-desktop-container {
+  #active-desktop-container,
+  #desktop-control-center {
     display: none !important;
   }
 

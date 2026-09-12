@@ -24,7 +24,7 @@
 
   <!-- Classic 98.css framework and custom stylesheet -->
   <link rel="stylesheet" href="https://unpkg.com/98.css" />
-  <link rel="stylesheet" href="style.css?v=1.4.0" />
+  <link rel="stylesheet" href="style.css?v=1.5.0" />
 </head>
 <body class="desktop booting">
 
@@ -406,14 +406,6 @@
       </div>
     </div>
 
-    <!-- 5. Active Desktop Live Ticker Bar -->
-    <div id="widget-desktop-ticker" class="active-widget desktop-ticker">
-      <div class="ticker-badge">LIVE TICKER</div>
-      <div class="ticker-content">
-        <span class="ticker-text">⚡ VIT VELLORE B.TECH CSE (2026) ▲ &nbsp;&bull;&nbsp; FULL-STACK &amp; AI SYSTEMS ▲ &nbsp;&bull;&nbsp; FASTAPI, DOCKER &amp; PYTORCH ▲ &nbsp;&bull;&nbsp; LEETCODE ACTIVE ▲ &nbsp;&bull;&nbsp; WIN98 RETRO PORTFOLIO ONLINE ▲</span>
-      </div>
-    </div>
-
   </aside>
 
   <!-- =======================================================================
@@ -704,9 +696,83 @@
     </button>
     <div class="taskbar-windows" id="taskbar-windows"></div>
     <div class="taskbar-tray">
+      <button class="tray-btn" id="tray-ctrl-center-btn" onclick="toggleDesktopControlCenter()" title="Windows 98 Control Center" aria-label="Control Center">⚙️</button>
+      <button class="tray-btn" id="tray-wifi-btn" onclick="toggleWiFi(); updateControlCenterUI();" title="VIT-WiFi: Connected" aria-label="Network">📶</button>
+      <button class="tray-btn" id="tray-widgets-btn" onclick="toggleActiveDesktop()" title="Toggle Active Desktop Widgets" aria-label="Desktop Widgets">🖥️</button>
       <button class="tray-btn" id="tray-crt-btn" onclick="toggleCRT()" title="Toggle CRT Filter" aria-label="Toggle CRT Filter">📺</button>
       <button class="tray-btn" id="tray-sound-btn" onclick="toggleAudio()" title="Toggle Sound" aria-label="Toggle Sound">🔊</button>
-      <div class="taskbar-clock" id="taskbar-clock" aria-label="System Clock">12:00 PM</div>
+      <button class="tray-btn" id="tray-theme-btn" onclick="toggleDesktopTheme(); updateControlCenterUI();" title="Switch Wallpaper / Theme" aria-label="Theme">🎨</button>
+      <div class="taskbar-clock" id="taskbar-clock" onclick="toggleDesktopControlCenter()" aria-label="System Clock" title="Click for Control Center">12:00 PM</div>
+    </div>
+
+    <!-- Desktop Control Center Quick Settings Flyout -->
+    <div id="desktop-control-center" role="dialog" aria-label="Windows 98 Control Center">
+      <div class="desktop-cc-titlebar">
+        <div class="desktop-cc-title">
+          <img src="assets/my-computer.png" alt="" />
+          <span>Control Center &bull; Quick Settings</span>
+        </div>
+        <button class="desktop-cc-close" onclick="closeDesktopControlCenter()" aria-label="Close">✕</button>
+      </div>
+      <div class="desktop-cc-body">
+        <div class="desktop-cc-user-card">
+          <div class="desktop-cc-avatar">SD</div>
+          <div class="desktop-cc-user-info">
+            <strong>Sagnik Datta</strong>
+            <span>VIT Vellore &bull; CSE '26</span>
+          </div>
+          <div class="desktop-cc-power-btns">
+            <button class="desktop-cc-mini-btn" onclick="rebootPC(); closeDesktopControlCenter();" title="Restart Computer">🔄</button>
+            <button class="desktop-cc-mini-btn" onclick="lockPC(); closeDesktopControlCenter();" title="Lock Workstation">🔒</button>
+          </div>
+        </div>
+
+        <div class="desktop-cc-grid">
+          <button class="desktop-cc-tile active" id="dcc-wifi" onclick="toggleWiFi(); updateControlCenterUI();">
+            <span class="dcc-tile-icon">📶</span>
+            <span class="dcc-tile-label">VIT-WiFi</span>
+            <span class="dcc-tile-status" id="dcc-wifi-status">Connected</span>
+          </button>
+          <button class="desktop-cc-tile active" id="dcc-audio" onclick="toggleAudio(); updateControlCenterUI();">
+            <span class="dcc-tile-icon">🔊</span>
+            <span class="dcc-tile-label">Sound FX</span>
+            <span class="dcc-tile-status" id="dcc-audio-status">Enabled</span>
+          </button>
+          <button class="desktop-cc-tile" id="dcc-crt" onclick="toggleCRT(); updateControlCenterUI();">
+            <span class="dcc-tile-icon">📺</span>
+            <span class="dcc-tile-label">CRT Filter</span>
+            <span class="dcc-tile-status" id="dcc-crt-status">Off</span>
+          </button>
+          <button class="desktop-cc-tile active" id="dcc-widgets" onclick="toggleActiveDesktop(); updateControlCenterUI();">
+            <span class="dcc-tile-icon">🖥️</span>
+            <span class="dcc-tile-label">Widgets</span>
+            <span class="dcc-tile-status" id="dcc-widgets-status">Active</span>
+          </button>
+          <button class="desktop-cc-tile" id="dcc-theme" onclick="toggleDesktopTheme(); updateControlCenterUI();">
+            <span class="dcc-tile-icon">🎨</span>
+            <span class="dcc-tile-label">Wallpaper</span>
+            <span class="dcc-tile-status" id="dcc-theme-status">Clouds</span>
+          </button>
+          <button class="desktop-cc-tile" id="dcc-bios" onclick="openBios(); closeDesktopControlCenter();">
+            <span class="dcc-tile-icon">⚙️</span>
+            <span class="dcc-tile-label">ROM BIOS</span>
+            <span class="dcc-tile-status">Setup</span>
+          </button>
+        </div>
+
+        <div class="desktop-cc-actions">
+          <button class="desktop-cc-btn" onclick="openWindow('aboutMe'); closeDesktopControlCenter();">
+            💻 System Info
+          </button>
+          <button class="desktop-cc-btn" onclick="playBootChime();">
+            🎵 Test Chime
+          </button>
+        </div>
+
+        <div class="desktop-cc-footer">
+          <span>⚡ AC Power (100%) &bull; 128 MB RAM &bull; All Services Normal</span>
+        </div>
+      </div>
     </div>
   </footer>
 
@@ -814,7 +880,7 @@
   <!-- =======================================================================
        SCRIPTS
        ======================================================================= -->
-  <script src="minesweeper.js?v=1.4.0"></script>
-  <script src="script.js?v=1.4.0"></script>
+  <script src="minesweeper.js?v=1.5.0"></script>
+  <script src="script.js?v=1.5.0"></script>
 </body>
 </html>

@@ -75,8 +75,8 @@ function playBootChime() {
 
 function toggleAudio() {
   soundEnabled = !soundEnabled;
-  const btn = document.getElementById('tray-sound-btn');
-  if (btn) btn.textContent = soundEnabled ? '🔊' : '🔇';
+  if (typeof updateControlCenterUI === 'function') updateControlCenterUI();
+  if (soundEnabled) playClickSound();
 }
 
 /* ==========================================================================
@@ -354,6 +354,7 @@ function toggleStartMenu() {
   const btn = document.getElementById('start-btn');
   if (!menu || !btn) return;
 
+  closeDesktopControlCenter();
   const isVisible = menu.style.display === 'block';
   menu.style.display = isVisible ? 'none' : 'block';
   btn.classList.toggle('pressed', !isVisible);
@@ -367,10 +368,14 @@ function closeStartMenu() {
   if (btn) btn.classList.remove('pressed');
 }
 
-// Global click dismiss for Start menu & context menu
+// Global click dismiss for Start menu, Control Center & context menu
 window.addEventListener('click', (e) => {
   if (!e.target.closest('#start-btn') && !e.target.closest('#start-menu')) {
     closeStartMenu();
+  }
+  const cc = document.getElementById('desktop-control-center');
+  if (cc && !e.target.closest('#desktop-control-center') && !e.target.closest('.taskbar-tray')) {
+    closeDesktopControlCenter();
   }
   const ctx = document.getElementById('desktop-context-menu');
   if (ctx && !e.target.closest('#desktop-context-menu')) {
@@ -621,8 +626,8 @@ function toggleCRT() {
   } else {
     crt.remove();
   }
-  const btn = document.getElementById('tray-crt-btn');
-  if (btn) btn.title = document.getElementById('crt-overlay') ? 'CRT Effect: ON' : 'CRT Effect: OFF';
+  if (typeof updateControlCenterUI === 'function') updateControlCenterUI();
+  playClickSound();
 }
 
 function arrangeIcons() {
@@ -764,13 +769,16 @@ function toggleWiFi() {
   if (carrier) {
     carrier.textContent = wifiConnected ? 'Win98 4G' : 'No Service';
   }
+  updateControlCenterUI();
   playClickSound();
 }
 
 function updateControlCenterUI() {
+  const isCrt = (document.getElementById('crt-overlay') !== null);
+
+  // Mobile Control Center Toggles
   const crtCard = document.getElementById('ctrl-crt');
   const crtSub = document.getElementById('ctrl-crt-sub');
-  const isCrt = document.body.classList.contains('crt-mode');
   if (crtCard) crtCard.classList.toggle('active', isCrt);
   if (crtSub) crtSub.textContent = isCrt ? 'On' : 'Off';
 
@@ -778,6 +786,71 @@ function updateControlCenterUI() {
   const audioSub = document.getElementById('ctrl-audio-sub');
   if (audioCard) audioCard.classList.toggle('active', soundEnabled);
   if (audioSub) audioSub.textContent = soundEnabled ? 'On' : 'Mute';
+
+  const wifiCard = document.getElementById('ctrl-wifi');
+  if (wifiCard) {
+    wifiCard.classList.toggle('active', wifiConnected);
+    const sub = wifiCard.querySelector('.ctrl-sub');
+    if (sub) sub.textContent = wifiConnected ? 'Connected' : 'Disconnected';
+  }
+
+  // Desktop Control Center Quick Settings Tiles
+  const dccCrt = document.getElementById('dcc-crt');
+  const dccCrtStatus = document.getElementById('dcc-crt-status');
+  if (dccCrt) dccCrt.classList.toggle('active', isCrt);
+  if (dccCrtStatus) dccCrtStatus.textContent = isCrt ? 'On' : 'Off';
+
+  const dccAudio = document.getElementById('dcc-audio');
+  const dccAudioStatus = document.getElementById('dcc-audio-status');
+  if (dccAudio) dccAudio.classList.toggle('active', soundEnabled);
+  if (dccAudioStatus) dccAudioStatus.textContent = soundEnabled ? 'Enabled' : 'Muted';
+
+  const dccWifi = document.getElementById('dcc-wifi');
+  const dccWifiStatus = document.getElementById('dcc-wifi-status');
+  if (dccWifi) dccWifi.classList.toggle('active', wifiConnected);
+  if (dccWifiStatus) dccWifiStatus.textContent = wifiConnected ? 'Connected' : 'Offline';
+
+  const dccWidgets = document.getElementById('dcc-widgets');
+  const dccWidgetsStatus = document.getElementById('dcc-widgets-status');
+  if (dccWidgets) dccWidgets.classList.toggle('active', activeDesktopVisible);
+  if (dccWidgetsStatus) dccWidgetsStatus.textContent = activeDesktopVisible ? 'Active' : 'Hidden';
+
+  const dccThemeStatus = document.getElementById('dcc-theme-status');
+  if (dccThemeStatus && typeof themes !== 'undefined') {
+    dccThemeStatus.textContent = themes[currentThemeIndex].name;
+  }
+
+  // Taskbar System Tray Icons & Tooltips
+  const trayCrtBtn = document.getElementById('tray-crt-btn');
+  if (trayCrtBtn) {
+    trayCrtBtn.classList.toggle('tray-active', isCrt);
+    trayCrtBtn.title = isCrt ? 'CRT Filter: ON' : 'CRT Filter: OFF';
+  }
+
+  const traySoundBtn = document.getElementById('tray-sound-btn');
+  if (traySoundBtn) {
+    traySoundBtn.textContent = soundEnabled ? '🔊' : '🔇';
+    traySoundBtn.title = soundEnabled ? 'Audio FX: Enabled' : 'Audio FX: Muted';
+    traySoundBtn.classList.toggle('tray-active', !soundEnabled);
+  }
+
+  const trayWifiBtn = document.getElementById('tray-wifi-btn');
+  if (trayWifiBtn) {
+    trayWifiBtn.textContent = wifiConnected ? '📶' : '📵';
+    trayWifiBtn.title = wifiConnected ? 'VIT-WiFi: Connected (100Mbps)' : 'VIT-WiFi: Disconnected';
+    trayWifiBtn.classList.toggle('tray-active', !wifiConnected);
+  }
+
+  const trayWidgetsBtn = document.getElementById('tray-widgets-btn');
+  if (trayWidgetsBtn) {
+    trayWidgetsBtn.title = activeDesktopVisible ? 'Desktop Widgets: Active' : 'Desktop Widgets: Hidden';
+    trayWidgetsBtn.classList.toggle('tray-active', activeDesktopVisible);
+  }
+
+  const trayThemeBtn = document.getElementById('tray-theme-btn');
+  if (trayThemeBtn && typeof themes !== 'undefined') {
+    trayThemeBtn.title = `Theme: ${themes[currentThemeIndex].name} (Click to switch)`;
+  }
 }
 
 function clearNotifications() {
@@ -1137,7 +1210,50 @@ function toggleActiveDesktop() {
   if (menuCheck) {
     menuCheck.textContent = activeDesktopVisible ? '✓ Active Desktop Widgets' : '  Active Desktop Widgets';
   }
+  updateControlCenterUI();
   playClickSound();
+}
+
+/* ==========================================================================
+   DESKTOP CONTROL CENTER & THEME SWITCHER
+   ========================================================================== */
+
+let currentThemeIndex = 0;
+const themes = [
+  { name: 'Clouds', bg: "url('assets/win98-wallpaper.jpg') no-repeat center center fixed", size: 'cover', color: '#008080' },
+  { name: 'Teal 98', bg: 'none', size: 'auto', color: '#008080' },
+  { name: 'Midnight', bg: 'none', size: 'auto', color: '#000030' }
+];
+
+function toggleDesktopTheme() {
+  currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+  const theme = themes[currentThemeIndex];
+  document.body.style.background = theme.bg;
+  document.body.style.backgroundSize = theme.size;
+  document.body.style.backgroundColor = theme.color;
+  updateControlCenterUI();
+  playClickSound();
+}
+
+function toggleDesktopControlCenter() {
+  const cc = document.getElementById('desktop-control-center');
+  if (!cc) return;
+  const isOpen = (cc.style.display === 'flex');
+  if (isOpen) {
+    closeDesktopControlCenter();
+  } else {
+    closeStartMenu();
+    updateControlCenterUI();
+    cc.style.display = 'flex';
+    playClickSound();
+  }
+}
+
+function closeDesktopControlCenter() {
+  const cc = document.getElementById('desktop-control-center');
+  if (cc && cc.style.display === 'flex') {
+    cc.style.display = 'none';
+  }
 }
 
 /* ==========================================================================
@@ -1150,6 +1266,7 @@ window.addEventListener('DOMContentLoaded', () => {
   initDesktopContextMenu();
   initMobileGestures();
   initActiveDesktop();
+  updateControlCenterUI();
   updateClock();
   setInterval(updateClock, 1000);
   startBootSequence();
