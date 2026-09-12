@@ -282,6 +282,7 @@ function updateTaskbar() {
   if (taskbar) taskbar.innerHTML = '';
 
   let openCount = 0;
+  let hasVisibleWindow = false;
   windowOrder.forEach(id => {
     const win = document.getElementById(id);
     if (!win) return;
@@ -289,6 +290,9 @@ function updateTaskbar() {
     const isOpen = win.style.display !== 'none' || minimizedWindows[id];
     if (isOpen) {
       openCount++;
+      if (win.style.display !== 'none' && !minimizedWindows[id]) {
+        hasVisibleWindow = true;
+      }
       if (!taskbar) return;
 
       const btn = document.createElement('button');
@@ -327,6 +331,8 @@ function updateTaskbar() {
       taskbar.appendChild(btn);
     }
   });
+
+  document.body.classList.toggle('has-open-window', hasVisibleWindow);
 
   const mobileTabsLabel = document.getElementById('mobile-tabs-label');
   if (mobileTabsLabel) {
@@ -939,6 +945,11 @@ function initMobileGestures() {
 
   document.addEventListener('touchstart', (e) => {
     if (window.innerWidth > 768) return;
+    // Don't intercept swipe gestures if user is interacting with scrollable content
+    if (e.target.closest('.window-body') || e.target.closest('#tabs-switcher-list') || e.target.closest('#notif-list')) {
+      isSwiping = false;
+      return;
+    }
     if (e.touches.length === 1) {
       touchStartY = e.touches[0].clientY;
       touchStartX = e.touches[0].clientX;
@@ -978,11 +989,13 @@ function initMobileGestures() {
             return;
           }
 
-          // Open drawer if touch started from lower 65% of screen
-          const drawer = document.getElementById('mobile-app-drawer');
-          if (drawer && !drawer.classList.contains('open')) {
-            if (touchStartY > window.innerHeight * 0.35) {
-              openAppDrawer();
+          // Open drawer ONLY from homescreen when no window is active
+          if (!document.body.classList.contains('has-open-window')) {
+            const drawer = document.getElementById('mobile-app-drawer');
+            if (drawer && !drawer.classList.contains('open')) {
+              if (touchStartY > window.innerHeight * 0.35) {
+                openAppDrawer();
+              }
             }
           }
         }
