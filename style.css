@@ -1206,7 +1206,7 @@ body.booting #mobile-tabs-switcher {
     box-shadow: none !important;
     z-index: 99995 !important;
     border-radius: 0 !important;
-    display: flex;
+    display: none;
     flex-direction: column;
   }
 

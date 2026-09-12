@@ -407,6 +407,16 @@ window.addEventListener('click', (e) => {
 function startBootSequence() {
   document.body.style.overflow = "hidden";
   document.body.classList.add('booting');
+  document.body.classList.remove('has-open-window');
+
+  // Ensure all application windows start closed on boot
+  windowOrder.forEach(id => {
+    const w = document.getElementById(id);
+    if (w) w.style.display = 'none';
+    minimizedWindows[id] = false;
+  });
+  activeWindowId = null;
+  updateTaskbar();
 
   const bootupOverlay = document.getElementById('bootup-overlay');
   const biosScreen = document.getElementById('bios-screen');
@@ -461,9 +471,21 @@ function checkLogin() {
     if (overlay) overlay.style.display = 'none';
     document.body.style.overflow = '';
     document.body.classList.remove('booting');
+    document.body.classList.remove('has-open-window');
     if (errorDiv) errorDiv.textContent = '';
     playBootChime();
-    // Initially all windows stay closed as requested
+
+    // Clean homescreen state: all windows remain closed
+    windowOrder.forEach(id => {
+      const w = document.getElementById(id);
+      if (w) w.style.display = 'none';
+      minimizedWindows[id] = false;
+    });
+    activeWindowId = null;
+    closeAppDrawer();
+    closeNotificationCenter();
+    closeTabsSwitcher();
+    updateTaskbar();
   } else {
     playErrorSound();
     if (errorDiv) errorDiv.textContent = 'Incorrect password! Hint: sagnik';
