@@ -110,7 +110,7 @@ function closeWindow(id) {
   const win = document.getElementById(id);
   if (!win) return;
   win.style.display = 'none';
-  win.classList.remove('maximized');
+  win.classList.remove('maximized', 'active');
   minimizedWindows[id] = false;
 
   if (activeWindowId === id) {
@@ -120,7 +120,7 @@ function closeWindow(id) {
     let nextActive = null;
     windowOrder.forEach(wid => {
       const w = document.getElementById(wid);
-      if (w && w.style.display !== 'none' && !minimizedWindows[wid]) {
+      if (w && w.style.display === 'flex') {
         const z = parseInt(w.style.zIndex || '0');
         if (z > highestZ) {
           highestZ = z;
@@ -136,17 +136,7 @@ function closeWindow(id) {
 }
 
 function minimizeWindow(id) {
-  const win = document.getElementById(id);
-  if (!win) return;
-  win.style.display = 'none';
-  minimizedWindows[id] = true;
-
-  if (activeWindowId === id) {
-    activeWindowId = null;
-  }
-
-  updateTaskbar();
-  playClickSound();
+  closeWindow(id);
 }
 
 function maximizeWindow(id) {
@@ -287,12 +277,10 @@ function updateTaskbar() {
     const win = document.getElementById(id);
     if (!win) return;
 
-    const isOpen = win.style.display !== 'none' || minimizedWindows[id];
+    const isOpen = (win.style.display === 'flex');
     if (isOpen) {
       openCount++;
-      if (win.style.display !== 'none' && !minimizedWindows[id]) {
-        hasVisibleWindow = true;
-      }
+      hasVisibleWindow = true;
       if (!taskbar) return;
 
       const btn = document.createElement('button');
@@ -309,23 +297,13 @@ function updateTaskbar() {
       btn.appendChild(iconImg);
       btn.appendChild(spanText);
 
-      if (minimizedWindows[id]) {
-        btn.classList.add('minimized');
-      } else if (activeWindowId === id) {
+      if (activeWindowId === id) {
         btn.classList.add('active');
       }
 
       btn.onclick = () => {
         playClickSound();
-        if (minimizedWindows[id]) {
-          win.style.display = 'flex';
-          minimizedWindows[id] = false;
-          bringToFront(id);
-        } else if (activeWindowId === id) {
-          minimizeWindow(id);
-        } else {
-          bringToFront(id);
-        }
+        bringToFront(id);
       };
 
       taskbar.appendChild(btn);
@@ -850,7 +828,7 @@ function renderTabsSwitcher() {
 
   const openIds = windowOrder.filter(id => {
     const win = document.getElementById(id);
-    return win && (win.style.display !== 'none' || minimizedWindows[id]);
+    return win && win.style.display === 'flex';
   });
 
   if (openIds.length === 0) {
@@ -868,7 +846,7 @@ function renderTabsSwitcher() {
     const titleBarText = win.querySelector('.title-bar-text');
     const title = titleBarText ? titleBarText.textContent : id;
     const icon = windowIcons[id] || 'assets/my-computer.png';
-    const isActive = (activeWindowId === id && !minimizedWindows[id]);
+    const isActive = (activeWindowId === id);
 
     const card = document.createElement('div');
     card.className = 'tab-card';
@@ -905,14 +883,10 @@ function switchToTab(id) {
 
 function closeAllTabs() {
   windowOrder.forEach(id => {
-    const win = document.getElementById(id);
-    if (win) {
-      win.style.display = 'none';
-      win.classList.remove('maximized');
-      minimizedWindows[id] = false;
-    }
+    closeWindow(id);
   });
   activeWindowId = null;
+  document.body.classList.remove('has-open-window');
   updateTaskbar();
   renderTabsSwitcher();
   playClickSound();
@@ -923,13 +897,16 @@ function goHome() {
   closeAppDrawer();
   closeNotificationCenter();
   closeTabsSwitcher();
+
+  // Fully close and clear all open tabs from the open tabs section
   windowOrder.forEach(id => {
-    const w = document.getElementById(id);
-    if (w) w.style.display = 'none';
-    minimizedWindows[id] = false;
+    closeWindow(id);
   });
+
   activeWindowId = null;
+  document.body.classList.remove('has-open-window');
   updateTaskbar();
+  renderTabsSwitcher();
   playClickSound();
 }
 

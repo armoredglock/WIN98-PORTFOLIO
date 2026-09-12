@@ -360,6 +360,11 @@ body.desktop {
   color: #d4d0c8;
 }
 
+.window .title-bar-controls button[aria-label="Minimize"],
+.window .title-bar-controls button[aria-label="Maximize"] {
+  display: none !important;
+}
+
 .window .window-body {
   flex: 1;
   overflow-y: auto;
