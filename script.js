@@ -882,8 +882,12 @@ function switchToTab(id) {
 }
 
 function closeAllTabs() {
+  document.querySelectorAll('.window').forEach(win => {
+    win.style.display = 'none';
+    win.classList.remove('maximized', 'active');
+  });
   windowOrder.forEach(id => {
-    closeWindow(id);
+    minimizedWindows[id] = false;
   });
   activeWindowId = null;
   document.body.classList.remove('has-open-window');
@@ -899,8 +903,13 @@ function goHome() {
   closeTabsSwitcher();
 
   // Fully close and clear all open tabs from the open tabs section
+  document.querySelectorAll('.window').forEach(win => {
+    win.style.display = 'none';
+    win.classList.remove('maximized', 'active');
+  });
+
   windowOrder.forEach(id => {
-    closeWindow(id);
+    minimizedWindows[id] = false;
   });
 
   activeWindowId = null;
@@ -944,8 +953,8 @@ function initMobileGestures() {
 
   document.addEventListener('touchstart', (e) => {
     if (window.innerWidth > 768) return;
-    // Don't intercept swipe gestures if user is interacting with scrollable content
-    if (e.target.closest('.window-body') || e.target.closest('#tabs-switcher-list') || e.target.closest('#notif-list')) {
+    // Don't intercept swipe gestures if user is interacting with navigation or scrollable content
+    if (e.target.closest('#mobile-nav-bar') || e.target.closest('#mobile-statusbar') || e.target.closest('.window-body') || e.target.closest('#tabs-switcher-list') || e.target.closest('#notif-list')) {
       isSwiping = false;
       return;
     }

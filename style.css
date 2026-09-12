@@ -1505,6 +1505,10 @@ body.booting #mobile-tabs-switcher {
     color: #000;
     cursor: pointer;
     gap: 1px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   .mobile-nav-btn:active {
