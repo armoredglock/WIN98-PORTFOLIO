@@ -3,288 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Portfolio</title>
+  <title>Sagnik Datta - Windows 98 Portfolio</title>
+  <!-- Classic 98.css framework and custom stylesheet -->
   <link rel="stylesheet" href="https://unpkg.com/98.css" />
   <link rel="stylesheet" href="style.css" />
-  <style>
-    .desktop-icons {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      margin: 40px;
-    }
-    .icon {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      width: 52px;
-      user-select: none;
-    }
-    .icon img {
-      width: 36px;
-      height: 36px;
-    }
-    .icon span {
-      font-size: 14px;
-      color: #fff;
-      margin-top: 4px;
-      text-shadow: 1px 1px 2px #000;
-      text-align: center;
-      line-height: 1.2;
-    }
-    #msw-board { display: grid; grid-template-columns: repeat(9, 32px); grid-gap: 3px; margin: 16px auto; }
-    .msw-cell {
-      width: 32px; height: 32px; background: #c0c0c0; border: 2px outset #fff; text-align: center;
-      font-family: monospace; font-size: 1.3rem; cursor: pointer; user-select: none;
-    }
-    .msw-cell.open { background: #e0e0e0; border: 2px inset #888; cursor: default; }
-    .msw-cell.flag { background: #c0c0c0; color: #d00; }
-    #msw-status { margin: 0 0 8px 0; font-family: 'MS Sans Serif', Arial, sans-serif; font-size: 1.2rem; }
-    #msw-reset { background: #e0e0e0; border: 2px outset #fff; border-radius: 4px; font-size: 1.2rem; cursor: pointer; margin-left: 10px; }
-    #msw-reset:active { background: #b0b0b0; border: 2px inset #888; }
-    #msw-message {
-      font-family: 'MS Sans Serif', Arial, sans-serif;
-      font-size: 1.2rem;
-      color: #c00;
-      margin-top: 10px;
-      text-align: center;
-      min-height: 1.5em;
-    }
-    .start-menu {
-      display: none;
-      flex-direction: column;
-      min-width: 260px;
-      position: fixed;
-      left: 0;
-      bottom: 40px;
-      background: #fff;
-      border-radius: 0 0 6px 6px;
-      box-shadow: 2px 2px 8px #888;
-      z-index: 1000;
-      border: 2px solid #245edb;
-      padding: 0;
-      animation: popup 0.15s cubic-bezier(.5,1.8,.6,1) 1;
-    }
-    @keyframes popup {
-      from { transform: translateY(20px); opacity: 0; }
-      to   { transform: translateY(0); opacity: 1; }
-    }
-    .start-menu ul {
-      margin: 0;
-      padding: 8px 0 0 0;
-      flex: 1;
-      list-style: none;
-      background: transparent;
-      border-radius: 0;
-      box-shadow: none;
-      z-index: 2;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-    .start-menu li {
-      display: flex;
-      align-items: center;
-      padding: 8px 16px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      font-family: 'MS Sans Serif', Arial, sans-serif;
-      transition: background 0.1s;
-      border: none;
-      background: none;
-    }
-    .start-menu li:hover {
-      background: #c0c0c0;
-    }
-    .start-divider {
-      border-top: 2px solid #000;
-      margin: 8px 0 8px 0;
-      height: 0;
-      padding: 0;
-      width: 90%;
-      align-self: center;
-    }
-    .start-icon {
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
-    }
-    .start-label {
-      font-family: 'MS Sans Serif', Arial, sans-serif;
-      font-size: 1.1rem;
-    }
-    .taskbar {
-      position: fixed;
-      left: 0; right: 0; bottom: 0;
-      height: 40px;
-      background: #c0c0c0;
-      display: flex;
-      align-items: center;
-      z-index: 1001;
-      border-top: 2px solid #fff;
-      box-shadow: 0 -2px 8px #0002;
-    }
-    .start-button {
-      display: flex;
-      align-items: center;
-      background: #e0e0e0;
-      border: 2px outset #fff;
-      height: 32px;
-      margin-left: 8px;
-      padding: 0 16px 0 8px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-family: 'MS Sans Serif', Arial, sans-serif;
-      font-size: 1.1rem;
-      font-weight: bold;
-      gap: 6px;
-    }
-    .start-button:active {
-      background: #b0b0b0;
-      border: 2px inset #888;
-    }
-    .taskbar-windows {
-      display: flex;
-      align-items: center;
-      flex: 1;
-      margin-left: 16px;
-      gap: 8px;
-    }
-    .taskbar-window-btn {
-      background: #e0e0e0;
-      border: 2px outset #fff;
-      height: 32px;
-      width: 36px;
-      border-radius: 3px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 4px;
-      padding: 0;
-      transition: background 0.1s, border 0.1s;
-    }
-    .taskbar-window-btn.active, .taskbar-window-btn:active {
-      background: #b0b0b0;
-      border: 2px inset #888;
-    }
-    .taskbar-window-btn.minimized {
-      opacity: 0.6;
-    }
-    .taskbar-window-btn img {
-      width: 22px;
-      height: 22px;
-      display: block;
-    }
-    .taskbar-clock {
-      margin-right: 18px;
-      font-family: 'MS Sans Serif', Arial, sans-serif;
-      font-size: 1.1rem;
-      color: #333;
-      min-width: 62px;
-      text-align: right;
-    }
-    /* BIOS Popup Styles */
-    #bios-popup {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: #000 !important;
-      z-index: 9999;
-    }
-    #bios-popup-inner {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      background: #000;
-      color: #0f0;
-      font-family: monospace;
-      font-size: 1.1rem;
-      border: 4px solid #0f0;
-      padding: 32px 48px;
-      min-width: 420px;
-      box-shadow: 0 0 24px #000;
-    }
-    #bios-popup-inner hr {
-      border: none;
-      border-top: 1px solid #0f0;
-      margin: 8px 0;
-    }
-    #bios-popup-inner .bios-title {
-      font-size: 1.3rem;
-      color: #fff;
-      margin-bottom: 18px;
-      letter-spacing: 1px;
-      text-align: center;
-    }
-    .bios-tabs-bar {
-      display: flex;
-      gap: 18px;
-      margin-bottom: 10px;
-      justify-content: center;
-    }
-    .bios-tab-btn {
-      background: none;
-      border: none;
-      color: #0f0;
-      font-family: monospace;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      padding: 2px 8px;
-      border-bottom: 2px solid transparent;
-      transition: border 0.2s, color 0.2s;
-    }
-    .bios-tab-btn.active, .bios-tab-btn:focus {
-      color: #fff;
-      border-bottom: 2px solid #fff;
-      outline: none;
-    }
-    .bios-tab-content {
-      min-height: 120px;
-      margin-bottom: 10px;
-    }
-    .bios-label { color: #fff; }
-    .bios-exit-btn {
-      margin-top: 16px;
-      background: #111;
-      color: #0f0;
-      border: 2px solid #0f0;
-      font-family: monospace;
-      font-size: 1.1rem;
-      padding: 6px 18px;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: background 0.2s, color 0.2s;
-    }
-    .bios-exit-btn:hover, .bios-exit-btn:focus {
-      background: #0f0;
-      color: #000;
-      outline: none;
-    }
-    /* Certifications window width fix */
-    #certifications.window {
-      min-width: 420px;
-      max-width: 90vw;
-    }
-    #certifications .window-body {
-      width: 400px;
-      max-width: 90vw;
-      overflow-x: auto;
-      word-break: break-word;
-    }
-  </style>
 </head>
 <body class="desktop">
 
-
-  <!-- BIOS Popup Window -->
-  <div id="bios-popup">
+  <!-- =======================================================================
+       BIOS SETUP UTILITY (EASTER EGG - PRESS 'DELETE' DURING BOOT)
+       ======================================================================= -->
+  <div id="bios-popup" role="dialog" aria-modal="true" aria-label="BIOS Setup Utility">
     <div id="bios-popup-inner">
-      <div class="bios-title">BIOS Setup Utility</div>
+      <div class="bios-title">ROM BIOS SETUP UTILITY (C) 1998</div>
       <div class="bios-tabs-bar">
         <button class="bios-tab-btn active" id="bios-tab-main" onclick="showBiosTab('main')">Main</button>
         <button class="bios-tab-btn" id="bios-tab-advanced" onclick="showBiosTab('advanced')">Advanced</button>
@@ -292,106 +23,122 @@
         <button class="bios-tab-btn" id="bios-tab-security" onclick="showBiosTab('security')">Security</button>
         <button class="bios-tab-btn" id="bios-tab-exit" onclick="showBiosTab('exit')">Exit</button>
       </div>
-      <hr>
+      <hr />
       <div class="bios-tab-content" id="bios-tab-content-main">
-        <div>System Time: <span id="bios-time"></span></div>
-        <div>System Date: <span id="bios-date"></span></div>
-        <div>Primary Master: <span class="bios-label">ST3250823A</span></div>
-        <div>Primary Slave: <span class="bios-label">None</span></div>
-        <div>Memory: <span class="bios-label">256 MB</span></div>
-        <div>CPU: <span class="bios-label">Intel Pentium III 933MHz</span></div>
+        <div>System Time: <span id="bios-time" class="bios-label"></span></div>
+        <div>System Date: <span id="bios-date" class="bios-label"></span></div>
+        <div>Primary Master: <span class="bios-label">Quantum Fireball 4.3GB</span></div>
+        <div>Primary Slave: <span class="bios-label">ATAPI 32X CD-ROM</span></div>
+        <div>Base Memory: <span class="bios-label">640 KB</span></div>
+        <div>Extended Memory: <span class="bios-label">130048 KB (128 MB SDRAM)</span></div>
       </div>
       <div class="bios-tab-content" id="bios-tab-content-advanced" style="display:none;">
-        <div>CPU Configuration: <span class="bios-label">Enabled</span></div>
-        <div>Integrated Peripherals: <span class="bios-label">Standard</span></div>
-        <div>USB Controller: <span class="bios-label">Enabled</span></div>
-        <div>Onboard Audio: <span class="bios-label">Enabled</span></div>
+        <div>CPU Type: <span class="bios-label">Intel Pentium II @ 350 MHz</span></div>
+        <div>L2 Cache: <span class="bios-label">512 KB Pipelined Burst</span></div>
+        <div>Video Adapter: <span class="bios-label">3Dfx Voodoo2 12MB</span></div>
+        <div>Sound Card: <span class="bios-label">Creative Sound Blaster 16</span></div>
       </div>
       <div class="bios-tab-content" id="bios-tab-content-boot" style="display:none;">
-        <div>Boot Sequence:</div>
-        <ol style="color:#fff; margin-left:18px;">
-          <li>Floppy Drive</li>
-          <li>CD-ROM Drive</li>
-          <li>Hard Disk</li>
-        </ol>
-        <div>Quick Boot: <span class="bios-label">Enabled</span></div>
+        <div>1st Boot Device: <span class="bios-label">[IDE-0 Hard Disk]</span></div>
+        <div>2nd Boot Device: <span class="bios-label">[Floppy Drive A:]</span></div>
+        <div>3rd Boot Device: <span class="bios-label">[CD-ROM Drive]</span></div>
+        <div>Quick Power On Self Test: <span class="bios-label">[Enabled]</span></div>
       </div>
       <div class="bios-tab-content" id="bios-tab-content-security" style="display:none;">
-        <div>Supervisor Password: <span class="bios-label">Not Set</span></div>
-        <div>User Password: <span class="bios-label">Not Set</span></div>
-        <div>Set Supervisor Password</div>
-        <div>Set User Password</div>
+        <div>Supervisor Password: <span class="bios-label">Disabled</span></div>
+        <div>User Password: <span class="bios-label">sagnik</span></div>
+        <div>Virus Warning Protection: <span class="bios-label">[Enabled]</span></div>
       </div>
       <div class="bios-tab-content" id="bios-tab-content-exit" style="display:none;">
-        <div>Exit Saving Changes</div>
-        <div>Exit Discarding Changes</div>
-        <div>Load Setup Defaults</div>
-        <button class="bios-exit-btn" onclick="closeBios()">Exit BIOS</button>
+        <div>Press <span class="bios-label">[Exit Setup]</span> or <span class="bios-label">[ESC]</span> to save changes and boot Windows 98.</div>
+        <button class="bios-exit-btn" onclick="closeBios()">Save &amp; Exit Setup (ESC)</button>
       </div>
-      <hr>
-      <div style="margin-top:8px;">Press <b>ESC</b> to exit BIOS</div>
+      <hr />
+      <div style="text-align: center; font-size: 0.85rem; color: #ffff55;">
+        Use [TAB] / Click to switch menu &bull; [ESC] to Exit
+      </div>
     </div>
   </div>
 
-  <!-- Bootup Screens -->
+  <!-- =======================================================================
+       BOOTUP, BIOS SPLASH, LOGO & LOGIN OVERLAY
+       ======================================================================= -->
   <div id="bootup-overlay">
+    <!-- BIOS POST Splash Screen -->
     <div id="bios-screen" class="bootup-screen">
-      <div id="bootlogger" style="color:lime; font-family: monospace; font-weight: bold; font-size: 1.5rem; text-align: center; margin-bottom: 20px; height: 24px;"></div>
-      <div class="bios-text" style="visibility: hidden;">
-        <p>American Megatrends</p>
-        <p>AMIBIOS (C)1999</p>
-        <p>Press DEL to enter Setup</p>
-        <p>Initializing...</p>
+      <div class="bios-text">
+        Award Modular BIOS v4.51PG, An Energy Star Ally
+        Copyright (C) 1984-98, Award Software, Inc.
+
+        PENTIUM-II CPU at 350MHz
+        Memory Test : 131072K OK
+
+        Award Plug and Play BIOS Extension v1.0A
+        Detecting IDE Primary Master ... Quantum Fireball 4.3GB
+        Detecting IDE Primary Slave  ... None
+        <div class="bios-hint">Press <b>DEL</b> to enter SETUP &bull; Press <b>ESC</b> to skip</div>
       </div>
     </div>
+
+    <!-- Windows 98 Boot Screen with Animated Loading Bar -->
     <div id="windows-logo-screen" class="bootup-screen" style="display:none;">
-      <img src="assets/boot-image.png" alt="Boot Image" class="windows-logo" />
-      <div class="loading-bar"></div>
+      <img src="assets/boot-image.png" alt="Windows 98" class="windows-logo" />
+      <div class="loading-bar">
+        <div id="loading-progress" class="loading-progress"></div>
+      </div>
     </div>
+
+    <!-- Windows 98 User Authentication Screen -->
     <div id="login-screen" class="bootup-screen" style="display:none;">
       <div class="login-box">
-        <img src="assets/user.jpg" alt="User" class="login-user-icon" />
+        <img src="assets/user.jpg?v=2" alt="User Profile" class="login-user-icon" />
         <div class="login-name">Sagnik Datta</div>
-        <div class="login-passHelp">Enter password: sagnik</div>
-        <input type="password" id="login-password" placeholder="Password" autocomplete="off" style="margin-bottom:12px; width:100%;" />
-        <button class="login-btn" onclick="checkLogin()">Login</button>
+        <div class="login-passHelp">Enter password: <b>sagnik</b></div>
+        <input type="password" id="login-password" placeholder="Password" autocomplete="off" />
+        <button class="login-btn" onclick="checkLogin()">OK</button>
         <div id="login-error" class="login-error"></div>
       </div>
     </div>
   </div>
 
-  <!-- Desktop Icons -->
-  <div class="desktop-icons">
-    <div class="icon" ondblclick="openWindow('aboutMe')">
-      <img src="assets/my-computer.png" alt="About Me" />
+  <!-- =======================================================================
+       DESKTOP SHORTCUT ICONS
+       ======================================================================= -->
+  <main class="desktop-icons" role="region" aria-label="Desktop Shortcuts">
+    <div class="icon" data-window="aboutMe" ondblclick="openWindow('aboutMe')" tabindex="0" role="button" aria-label="About Me">
+      <img src="assets/my-computer.png" alt="" />
       <span>About Me</span>
     </div>
-    <div class="icon" ondblclick="openWindow('resume')">
-      <img src="assets/resume.png" alt="Resume" />
+    <div class="icon" data-window="resume" ondblclick="openWindow('resume')" tabindex="0" role="button" aria-label="Resume">
+      <img src="assets/resume.png" alt="" />
       <span>Resume</span>
     </div>
-    <div class="icon" ondblclick="openWindow('contacts')">
-      <img src="assets/contacts.png" alt="Contacts" />
-      <span>Contacts</span>
-    </div>
-    <div class="icon" ondblclick="openWindow('skills')">
-      <img src="assets/skills.png" alt="Skills" />
+    <div class="icon" data-window="skills" ondblclick="openWindow('skills')" tabindex="0" role="button" aria-label="Skills">
+      <img src="assets/skills.png" alt="" />
       <span>Skills</span>
     </div>
-    <div class="icon" ondblclick="openWindow('certifications')">
-      <img src="assets/certifications.png" alt="Certifications" />
+    <div class="icon" data-window="certifications" ondblclick="openWindow('certifications')" tabindex="0" role="button" aria-label="Certifications">
+      <img src="assets/certifications.png" alt="" />
       <span>Certifications</span>
     </div>
-    <div class="icon" ondblclick="openWindow('minesweeper')">
-      <img src="assets/minesweeper.png" alt="Minesweeper" />
+    <div class="icon" data-window="contacts" ondblclick="openWindow('contacts')" tabindex="0" role="button" aria-label="Contacts">
+      <img src="assets/contacts.png" alt="" />
+      <span>Contacts</span>
+    </div>
+    <div class="icon" data-window="minesweeper" ondblclick="openWindow('minesweeper')" tabindex="0" role="button" aria-label="Minesweeper">
+      <img src="assets/minesweeper.png" alt="" />
       <span>Minesweeper</span>
     </div>
-  </div>
+  </main>
 
-  <!-- About Me Window -->
-  <div id="aboutMe" class="window" style="display:none;">
-    <div class="title-bar" onmousedown="bringToFront('aboutMe')">
-      <div class="title-bar-text">About Me</div>
+  <!-- =======================================================================
+       APPLICATION WINDOWS
+       ======================================================================= -->
+
+  <!-- 1. ABOUT ME WINDOW -->
+  <section id="aboutMe" class="window" role="dialog" aria-labelledby="title-aboutMe">
+    <div class="title-bar" onpointerdown="bringToFront('aboutMe')">
+      <div class="title-bar-text" id="title-aboutMe">About Me - System Properties</div>
       <div class="title-bar-controls">
         <button aria-label="Minimize" onclick="minimizeWindow('aboutMe')"></button>
         <button aria-label="Maximize" onclick="maximizeWindow('aboutMe')"></button>
@@ -399,14 +146,28 @@
       </div>
     </div>
     <div class="window-body">
-      <p style="font-size: x-large;">I'm <strong>Sagnik Datta</strong>, a B.Tech CSE student at VIT Vellore with a deep passion for technology and innovation. Fascinated by the Internet of Things (IoT), I’m driven to explore how interconnected devices can revolutionize everyday life. I enjoy diving into coding, emerging tech, and real-world problem-solving through hands-on projects. Always curious and eager to learn, I aim to build impactful, sustainable solutions and connect with like-minded individuals to shape the future of tech.</p>
+      <div style="display: flex; gap: 16px; align-items: flex-start;">
+        <img src="assets/my-computer.png" alt="" style="width: 48px; height: 48px; flex-shrink: 0; margin-top: 4px;" />
+        <div>
+          <p style="font-size: 1.1rem; line-height: 1.5; margin: 0 0 12px 0;">
+            I'm <strong>Sagnik Datta</strong>, a Computer Science &amp; Engineering undergraduate at <strong>VIT Vellore</strong> with a relentless drive for building scalable software, innovative AI integrations, and high-performance systems.
+          </p>
+          <p style="font-size: 0.95rem; line-height: 1.4; margin: 0 0 12px 0; color: #222;">
+            Passionate about backend architectures, local LLM deployment, and modern full-stack development. Always enthusiastic about building impactful, sustainable tech solutions and collaborating on challenging engineering problems.
+          </p>
+          <div style="display: flex; gap: 10px; margin-top: 8px;">
+            <button onclick="openWindow('skills')" style="padding: 3px 12px; font-weight: bold; cursor: pointer;">View Skills &raquo;</button>
+            <button onclick="openWindow('resume')" style="padding: 3px 12px; font-weight: bold; cursor: pointer;">View Resume &raquo;</button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Resume Window -->
-  <div id="resume" class="window" style="display:none;width: 581px;">
-    <div class="title-bar" onmousedown="bringToFront('resume')">
-      <div class="title-bar-text">Resume</div>
+  <!-- 2. RESUME WINDOW -->
+  <section id="resume" class="window" role="dialog" aria-labelledby="title-resume">
+    <div class="title-bar" onpointerdown="bringToFront('resume')">
+      <div class="title-bar-text" id="title-resume">Resume - Adobe Acrobat Reader</div>
       <div class="title-bar-controls">
         <button aria-label="Minimize" onclick="minimizeWindow('resume')"></button>
         <button aria-label="Maximize" onclick="maximizeWindow('resume')"></button>
@@ -414,34 +175,20 @@
       </div>
     </div>
     <div class="window-body">
-      <button class="resume-download-btn" onclick="window.open('resume.pdf', '_blank')">Download Resume (PDF)</button>
-      <iframe src="resume.pdf" width="100%" height="400px" style="border:1px solid #888; background:#fff; margin-top:12px;" title="Resume PDF Preview"></iframe>
-    </div>
-  </div>
-
-  <!-- Contacts Window -->
-  <div id="contacts" class="window" style="display:none;">
-    <div class="title-bar" onmousedown="bringToFront('contacts')">
-      <div class="title-bar-text">Contacts</div>
-      <div class="title-bar-controls">
-        <button aria-label="Minimize" onclick="minimizeWindow('contacts')"></button>
-        <button aria-label="Maximize" onclick="maximizeWindow('contacts')"></button>
-        <button aria-label="Close" onclick="closeWindow('contacts')"></button>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <button class="resume-download-btn" onclick="window.open('resume.pdf', '_blank')">
+          <img src="assets/resume.png" alt="" style="width:16px; height:16px; margin-right:6px; vertical-align:middle;" />Download Resume (PDF)
+        </button>
+        <span style="font-size: 11px; color: #555;">Format: PDF Document</span>
       </div>
+      <iframe id="resume-iframe" src="resume.pdf#view=FitH" title="Resume PDF Preview"></iframe>
     </div>
-    <div class="window-body">
-      <ul>
-        <li><strong>Email:</strong> <a href="mailto:sagnik.datta111@gmail.com">sagnik.datta111@gmail.com</a></li>
-        <li><strong>GitHub:</strong> <a href="https://github.com/sagnikdatta2k6" target="_blank">sagnikdatta2k6</a></li>
-        <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/sagnik-dattta-b48932208" target="_blank">sagnik-dattta-b48932208</a></li>
-      </ul>
-    </div>
-  </div>
+  </section>
 
-  <!-- Skills Window -->
-  <div id="skills" class="window" style="display:none;">
-    <div class="title-bar" onmousedown="bringToFront('skills')">
-      <div class="title-bar-text">Skills</div>
+  <!-- 3. SKILLS WINDOW (STRUCTURED CATEGORIES WITH EXACT REQUESTED SKILLS) -->
+  <section id="skills" class="window" role="dialog" aria-labelledby="title-skills">
+    <div class="title-bar" onpointerdown="bringToFront('skills')">
+      <div class="title-bar-text" id="title-skills">Skills - Technical Competencies</div>
       <div class="title-bar-controls">
         <button aria-label="Minimize" onclick="minimizeWindow('skills')"></button>
         <button aria-label="Maximize" onclick="maximizeWindow('skills')"></button>
@@ -449,385 +196,249 @@
       </div>
     </div>
     <div class="window-body">
-      <ul>
-        <li>Python (Programming Language)</li>
-        <li>Java</li>
-        <li>SQL</li>
-        <li>NumPy</li>
-        <li>Pandas</li>
-        <li>Seaborn</li>
-        <li>Computer Vision</li>
-        <li>Artificial Intelligence (AI)</li>
-        <li>Generative AI Tools</li>
-        <li>Data Structures</li>
-        <li>Python Data Structures</li>
-        <li>Python: Mastering the Essentials</li>
-        <li>Python (Basic)</li>
-        <li>Programming</li>
-        <li>Modularity</li>
-        <li>Class, Tuple, Dictionary, Set</li>
-      </ul>
-    </div>
-  </div>
+      <div class="skills-container">
 
-  <!-- Certifications Window -->
-  <div id="certifications" class="window" style="display:none;">
-    <div class="title-bar" onmousedown="bringToFront('certifications')">
-      <div class="title-bar-text">Certifications</div>
+        <!-- Category 1: Programming Languages -->
+        <fieldset class="skills-fieldset">
+          <legend class="skills-legend">Programming Languages</legend>
+          <div class="skills-chips">
+            <span class="skill-chip">Python</span>
+            <span class="skill-chip">C++</span>
+            <span class="skill-chip">TypeScript</span>
+            <span class="skill-chip">JavaScript (ES6+)</span>
+            <span class="skill-chip">SQL (Oracle/PostgreSQL)</span>
+            <span class="skill-chip">C</span>
+            <span class="skill-chip">HTML5</span>
+            <span class="skill-chip">CSS3</span>
+          </div>
+        </fieldset>
+
+        <!-- Category 2: Frameworks & Libraries -->
+        <fieldset class="skills-fieldset">
+          <legend class="skills-legend">Frameworks &amp; Libraries</legend>
+          <div class="skills-chips">
+            <span class="skill-chip">React.js</span>
+            <span class="skill-chip">Next.js</span>
+            <span class="skill-chip">Node.js</span>
+            <span class="skill-chip">Express.js</span>
+            <span class="skill-chip">FastAPI</span>
+            <span class="skill-chip">Prisma ORM</span>
+            <span class="skill-chip">WebSockets</span>
+            <span class="skill-chip">Tailwind CSS</span>
+            <span class="skill-chip">Streamlit</span>
+          </div>
+        </fieldset>
+
+        <!-- Category 3: AI, ML & Data Systems -->
+        <fieldset class="skills-fieldset">
+          <legend class="skills-legend">AI, ML &amp; Data Systems</legend>
+          <div class="skills-chips">
+            <span class="skill-chip">Local LLMs (LLaMA 3, Ollama)</span>
+            <span class="skill-chip">Retrieval-Augmented Generation (RAG)</span>
+            <span class="skill-chip">Vector Embeddings</span>
+            <span class="skill-chip">NLP</span>
+            <span class="skill-chip">Prompt Engineering</span>
+          </div>
+        </fieldset>
+
+        <!-- Category 4: Cloud, DevOps & Databases -->
+        <fieldset class="skills-fieldset">
+          <legend class="skills-legend">Cloud, DevOps &amp; Databases</legend>
+          <div class="skills-chips">
+            <span class="skill-chip">Oracle Cloud Infrastructure (OCI)</span>
+            <span class="skill-chip">Oracle Database</span>
+            <span class="skill-chip">Docker</span>
+            <span class="skill-chip">Kubernetes</span>
+            <span class="skill-chip">CI/CD Pipelines</span>
+            <span class="skill-chip">PostgreSQL</span>
+            <span class="skill-chip">Git</span>
+            <span class="skill-chip">Linux/Bash</span>
+          </div>
+        </fieldset>
+
+        <!-- Category 5: Engineering Methodologies -->
+        <fieldset class="skills-fieldset">
+          <legend class="skills-legend">Engineering Methodologies</legend>
+          <div class="skills-chips">
+            <span class="skill-chip">Agile</span>
+            <span class="skill-chip">Scrum</span>
+            <span class="skill-chip">Test-Driven Development (TDD)</span>
+            <span class="skill-chip">Unit Testing</span>
+            <span class="skill-chip">Root-Cause Debugging</span>
+            <span class="skill-chip">System Design</span>
+            <span class="skill-chip">REST APIs</span>
+            <span class="skill-chip">UML</span>
+          </div>
+        </fieldset>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. CERTIFICATIONS WINDOW -->
+  <section id="certifications" class="window" role="dialog" aria-labelledby="title-certifications">
+    <div class="title-bar" onpointerdown="bringToFront('certifications')">
+      <div class="title-bar-text" id="title-certifications">Certifications - Credentials</div>
       <div class="title-bar-controls">
         <button aria-label="Minimize" onclick="minimizeWindow('certifications')"></button>
         <button aria-label="Maximize" onclick="maximizeWindow('certifications')"></button>
         <button aria-label="Close" onclick="closeWindow('certifications')"></button>
       </div>
     </div>
-    <div class="window-body" style="width:400px; max-width:90vw; overflow-x:auto; word-break:break-word;">
-      <ul>
+    <div class="window-body">
+      <div class="cert-item">
+        <strong>Electronic Arts – Software Engineering Job Simulation</strong><br/>
+        <small>Issuer: Forage &bull; Issued: May 2025</small><br/>
+        <small>Credential ID: uKToaepPWFpsmaYKY</small><br/>
+        <span style="font-size: 11px; color: #444;">Skills: Software Engineering, Feature Implementation, Bug Fixing</span>
+      </div>
+      <div class="cert-item">
+        <strong>Generative AI for Beginners</strong><br/>
+        <small>Issuer: Great Learning &bull; Issued: Oct 2024</small><br/>
+        <span style="font-size: 11px; color: #444;">Skills: Artificial Intelligence (AI), Generative AI Tools</span>
+      </div>
+      <div class="cert-item">
+        <strong>Python (Basic)</strong><br/>
+        <small>Issuer: HackerRank &bull; Issued: Jul 2024</small><br/>
+        <small>Credential ID: D8F48CCB6D7E</small><br/>
+        <span style="font-size: 11px; color: #444;">Skills: Python, Data Structures, OOP, Modularity</span>
+      </div>
+      <div class="cert-item">
+        <strong>Python Data Structures</strong><br/>
+        <small>Issuer: Great Learning &bull; Issued: Jun 2024</small><br/>
+        <span style="font-size: 11px; color: #444;">Skills: Python, Core Algorithms</span>
+      </div>
+      <div class="cert-item">
+        <strong>Python: Mastering the Essentials</strong><br/>
+        <small>Issuer: Scaler &bull; Issued: Jun 2024</small><br/>
+        <span style="font-size: 11px; color: #444;">Skills: Python Programming, System Scripts</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. CONTACTS WINDOW -->
+  <section id="contacts" class="window" role="dialog" aria-labelledby="title-contacts">
+    <div class="title-bar" onpointerdown="bringToFront('contacts')">
+      <div class="title-bar-text" id="title-contacts">Contacts - Address Book</div>
+      <div class="title-bar-controls">
+        <button aria-label="Minimize" onclick="minimizeWindow('contacts')"></button>
+        <button aria-label="Maximize" onclick="maximizeWindow('contacts')"></button>
+        <button aria-label="Close" onclick="closeWindow('contacts')"></button>
+      </div>
+    </div>
+    <div class="window-body">
+      <p style="margin-top: 0; font-size: 12px;">Get in touch or connect across platforms:</p>
+      <ul style="list-style: none; padding-left: 4px; line-height: 2; font-size: 13px;">
         <li>
-          <strong>Electronic Arts – Software Engineering Job Simulation</strong><br>
-          Issuer: Forage<br>
-          Issued: May 2025<br>
-          Credential ID: uKToaepPWFpsmaYKY<br>
-          Skills: Software Engineering, Feature Implementation, Bug Fixing
+          📧 <strong>Email:</strong> 
+          <a class="contact-link" href="mailto:sagnik.datta111@gmail.com">sagnik.datta111@gmail.com</a>
         </li>
         <li>
-          <strong>Generative AI for Beginners</strong><br>
-          Issuer: Great Learning<br>
-          Issued: Oct 2024<br>
-          Skills: Artificial Intelligence (AI), Generative AI Tools
+          🐙 <strong>GitHub:</strong> 
+          <a class="contact-link" href="https://github.com/armoredglock" target="_blank" rel="noopener noreferrer">github.com/armoredglock</a>
         </li>
         <li>
-          <strong>Python (Basic)</strong><br>
-          Issuer: HackerRank<br>
-          Issued: Jul 2024<br>
-          Credential ID: D8F48CCB6D7E<br>
-          Skills: Python, Set, Tuple, Dictionary, Class, Modularity
-        </li>
-        <li>
-          <strong>Python Data Structures</strong><br>
-          Issuer: Great Learning<br>
-          Issued: Jun 2024<br>
-          Skills: Python, Data Structures
-        </li>
-        <li>
-          <strong>Python: Mastering the Essentials</strong><br>
-          Issuer: Scaler<br>
-          Issued: Jun 2024<br>
-          Skills: Python, Python (Programming Language)
+          💼 <strong>LinkedIn:</strong> 
+          <a class="contact-link" href="https://www.linkedin.com/in/sagnik-dattta-coder/" target="_blank" rel="noopener noreferrer">linkedin.com/in/sagnik-dattta-coder</a>
         </li>
       </ul>
     </div>
-  </div>
+  </section>
 
-  <!-- Minesweeper Window -->
-  <div id="minesweeper" class="window" style="display:none; min-width:320px;">
-    <div class="title-bar" onmousedown="bringToFront('minesweeper')">
-      <div class="title-bar-text">Minesweeper</div>
+  <!-- 6. MINESWEEPER WINDOW -->
+  <section id="minesweeper" class="window" role="dialog" aria-labelledby="title-minesweeper">
+    <div class="title-bar" onpointerdown="bringToFront('minesweeper')">
+      <div class="title-bar-text" id="title-minesweeper">Minesweeper</div>
       <div class="title-bar-controls">
         <button aria-label="Minimize" onclick="minimizeWindow('minesweeper')"></button>
         <button aria-label="Maximize" onclick="maximizeWindow('minesweeper')"></button>
         <button aria-label="Close" onclick="closeWindow('minesweeper')"></button>
       </div>
     </div>
-    <div class="window-body">
-      <div id="msw-status">Mines: <span id="msw-mines">10</span> <button id="msw-reset">💣</button></div>
-      <div id="msw-board"></div>
-      <div id="msw-message"></div>
-      <script>
-      (function(){
-        const rows = 9, cols = 9, mines = 10;
-        let board = [], revealed = [], flagged = [], gameOver = false, firstClick = true;
-        const boardDiv = document.getElementById('msw-board');
-        const minesSpan = document.getElementById('msw-mines');
-        const resetBtn = document.getElementById('msw-reset');
-        const messageDiv = document.getElementById('msw-message');
-        function init() {
-          board = Array(rows*cols).fill(0);
-          revealed = Array(rows*cols).fill(false);
-          flagged = Array(rows*cols).fill(false);
-          gameOver = false; firstClick = true;
-          minesSpan.textContent = mines;
-          messageDiv.textContent = '';
-          draw();
-        }
-        function placeMines(exclude) {
-          let placed = 0;
-          while (placed < mines) {
-            let idx = Math.floor(Math.random()*rows*cols);
-            if (board[idx] === 9 || idx === exclude) continue;
-            board[idx] = 9; placed++;
-          }
-          for (let i=0;i<rows*cols;i++) if (board[i]!==9) board[i]=countMines(i);
-        }
-        function countMines(i) {
-          let r = Math.floor(i/cols), c = i%cols, cnt = 0;
-          for (let dr=-1;dr<=1;dr++) for (let dc=-1;dc<=1;dc++) {
-            let nr=r+dr,nc=c+dc,ni=nr*cols+nc;
-            if (nr>=0&&nr<rows&&nc>=0&&nc<cols&&board[ni]===9) cnt++;
-          }
-          return cnt;
-        }
-        function draw() {
-          boardDiv.innerHTML = '';
-          boardDiv.style.gridTemplateColumns = `repeat(${cols}, 32px)`;
-          for (let i=0;i<rows*cols;i++) {
-            let cell = document.createElement('div');
-            cell.className = 'msw-cell';
-            if (revealed[i]) {
-              cell.classList.add('open');
-              if (board[i]===9) cell.textContent = '💣';
-              else if (board[i]>0) cell.textContent = board[i];
-            } else if (flagged[i]) {
-              cell.classList.add('flag');
-              cell.textContent = '🚩';
-            }
-            cell.oncontextmenu = e => { e.preventDefault(); if (!gameOver) flag(i); };
-            cell.onclick = e => { if (!gameOver) click(i); };
-            boardDiv.appendChild(cell);
-          }
-        }
-        function click(i) {
-          if (flagged[i]||revealed[i]) return;
-          if (firstClick) { placeMines(i); firstClick=false; }
-          if (board[i]===9) {
-            revealed[i]=true; gameOver=true; revealAll();
-            messageDiv.textContent = "You Lost!";
-          }
-          else open(i);
-          draw();
-          if (checkWin()) { gameOver=true; messageDiv.textContent = "You Win!"; }
-        }
-        function open(i) {
-          if (revealed[i]||flagged[i]) return;
-          revealed[i]=true;
-          if (board[i]===0) {
-            let r=Math.floor(i/cols),c=i%cols;
-            for (let dr=-1;dr<=1;dr++) for (let dc=-1;dc<=1;dc++) {
-              let nr=r+dr,nc=c+dc,ni=nr*cols+nc;
-              if (nr>=0&&nr<rows&&nc>=0&&nc<cols) open(ni);
-            }
-          }
-        }
-        function flag(i) {
-          if (revealed[i]) return;
-          flagged[i]=!flagged[i];
-          minesSpan.textContent = mines-flagged.filter(f=>f).length;
-          draw();
-        }
-        function revealAll() { for(let i=0;i<rows*cols;i++) revealed[i]=true; draw(); }
-        function checkWin() {
-          for(let i=0;i<rows*cols;i++) if (board[i]!==9 && !revealed[i]) return false;
-          return true;
-        }
-        resetBtn.onclick = init;
-        init();
-      })();
-      </script>
+    <div class="window-body" style="padding: 6px;">
+      <div id="msw98-root"></div>
     </div>
-  </div>
+  </section>
 
-  <!-- Taskbar -->
-  <div class="taskbar">
-    <div class="start-button" id="start-btn" tabindex="0" onclick="toggleStartMenu()">
-      <img src="assets/start.png" alt="Start" />
-      <span>Start</span>
-    </div>
-    <div class="taskbar-windows" id="taskbar-windows"></div>
-    <div class="taskbar-clock" id="taskbar-clock"></div>
-    <div class="start-menu" id="start-menu" style="display:none;">
-      <ul>
-        <li ondblclick="openWindow('aboutMe')">
-          <img src="assets/my-computer.png" class="start-icon" alt="About Me" />
-          <span class="start-label">About Me</span>
+  <!-- =======================================================================
+       AUTHENTIC WINDOWS 98 START MENU
+       ======================================================================= -->
+  <div class="start-menu" id="start-menu" role="menu" aria-label="Start Menu">
+    <div class="start-menu-inner">
+      <div class="start-menu-banner">
+        <span>Windows<b>98</b></span>
+      </div>
+      <ul class="start-menu-list">
+        <li class="start-menu-item" onclick="openWindow('aboutMe'); closeStartMenu();">
+          <img src="assets/my-computer.png" alt="" />
+          <span>About Me</span>
         </li>
-        <li ondblclick="openWindow('resume')">
-          <img src="assets/resume.png" class="start-icon" alt="Resume" />
-          <span class="start-label">Resume</span>
+        <li class="start-menu-item" onclick="openWindow('resume'); closeStartMenu();">
+          <img src="assets/resume.png" alt="" />
+          <span>Resume</span>
         </li>
-        <li ondblclick="openWindow('contacts')">
-          <img src="assets/contacts.png" class="start-icon" alt="Contacts" />
-          <span class="start-label">Contacts</span>
+        <li class="start-menu-item" onclick="openWindow('skills'); closeStartMenu();">
+          <img src="assets/skills.png" alt="" />
+          <span>Skills</span>
         </li>
-        <li ondblclick="openWindow('skills')">
-          <img src="assets/skills.png" class="start-icon" alt="Skills" />
-          <span class="start-label">Skills</span>
+        <li class="start-menu-item" onclick="openWindow('certifications'); closeStartMenu();">
+          <img src="assets/certifications.png" alt="" />
+          <span>Certifications</span>
         </li>
-        <li ondblclick="openWindow('certifications')">
-          <img src="assets/certifications.png" class="start-icon" alt="Certifications" />
-          <span class="start-label">Certifications</span>
+        <li class="start-menu-item" onclick="openWindow('contacts'); closeStartMenu();">
+          <img src="assets/contacts.png" alt="" />
+          <span>Contacts</span>
         </li>
-        <li ondblclick="openWindow('minesweeper')">
-          <img src="assets/minesweeper.png" class="start-icon" alt="Minesweeper" />
-          <span class="start-label">Minesweeper</span>
+        <li class="start-menu-item" onclick="openWindow('minesweeper'); closeStartMenu();">
+          <img src="assets/minesweeper.png" alt="" />
+          <span>Minesweeper</span>
         </li>
-        <li class="start-divider"></li>
-        <li onclick="rebootPC()">
-          <img src="assets/reboot.png" class="start-icon" alt="Reboot" />
-          <span class="start-label">Reboot PC</span>
+        <li class="start-menu-divider"></li>
+        <li class="start-menu-item" onclick="rebootPC()">
+          <img src="assets/reboot.png" alt="" />
+          <span>Restart Computer...</span>
         </li>
-        <li onclick="lockPC()">
-          <img src="assets/lock.png" class="start-icon" alt="Lock" />
-          <span class="start-label">Lock PC</span>
+        <li class="start-menu-item" onclick="lockPC()">
+          <img src="assets/lock.png" alt="" />
+          <span>Log Off Sagnik...</span>
         </li>
       </ul>
     </div>
   </div>
 
-<script>
-const bootloggerMessages = [
-  "BOOTLOGGER START",
-  "CHECKING SECTORS",
-  "LOADING MODULES",
-  "INITIALIZING HARDWARE",
-  "SYSTEM START"
-];
+  <!-- =======================================================================
+       DESKTOP RIGHT-CLICK CONTEXT MENU
+       ======================================================================= -->
+  <div id="desktop-context-menu" role="menu">
+    <div class="context-menu-item" onclick="arrangeIcons()">Arrange Icons</div>
+    <div class="context-menu-item" onclick="location.reload()">Refresh</div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item" onclick="toggleCRT()">Toggle CRT Scanlines</div>
+    <div class="context-menu-item" onclick="toggleAudio()">Toggle Sound Effects</div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item" onclick="openWindow('aboutMe')">Properties</div>
+  </div>
 
-function flashBootlogger(callback) {
-  const bootloggerDiv = document.getElementById('bootlogger');
-  const biosText = document.querySelector('#bios-screen .bios-text');
-  biosText.style.visibility = 'hidden';
+  <!-- =======================================================================
+       TASKBAR & SYSTEM TRAY
+       ======================================================================= -->
+  <footer class="taskbar" role="contentinfo">
+    <button class="start-button" id="start-btn" onclick="toggleStartMenu()" aria-haspopup="true" aria-expanded="false">
+      <img src="assets/start.png" alt="" />
+      <span>Start</span>
+    </button>
+    <div class="taskbar-windows" id="taskbar-windows"></div>
+    <div class="taskbar-tray">
+      <button class="tray-btn" id="tray-crt-btn" onclick="toggleCRT()" title="Toggle CRT Filter" aria-label="Toggle CRT Filter">📺</button>
+      <button class="tray-btn" id="tray-sound-btn" onclick="toggleAudio()" title="Toggle Sound" aria-label="Toggle Sound">🔊</button>
+      <div class="taskbar-clock" id="taskbar-clock" aria-label="System Clock">12:00 PM</div>
+    </div>
+  </footer>
 
-  let messageIndex = 0;
-
-  function showMessage(index) {
-    let message = bootloggerMessages[index];
-    let i = 0;
-    bootloggerDiv.textContent = '';
-    const interval = setInterval(() => {
-      if(i <= message.length) {
-        bootloggerDiv.textContent = message.slice(0, i);
-        i++;
-      } else {
-        clearInterval(interval);
-        setTimeout(() => {
-          bootloggerDiv.textContent = '';
-          messageIndex++;
-          if(messageIndex < bootloggerMessages.length) {
-            showMessage(messageIndex);
-          } else {
-            bootloggerDiv.textContent = '';
-            biosText.style.visibility = 'visible';
-            if(callback) callback();
-          }
-        }, 500);
-      }
-    }, 100);
-  }
-
-  showMessage(messageIndex);
-}
-
-window.onload = function() {
-  document.body.style.overflow = "hidden";
-
-  const bootupOverlay = document.getElementById('bootup-overlay');
-  const biosScreen = document.getElementById('bios-screen');
-  const logoScreen = document.getElementById('windows-logo-screen');
-  const loginScreen = document.getElementById('login-screen');
-
-  // Show overlay and BIOS splash on start
-  bootupOverlay.style.display = 'flex';
-  biosScreen.style.display = 'block';
-  logoScreen.style.display = 'none';
-  loginScreen.style.display = 'none';
-
-  // Play bootloader messages animation
-  flashBootlogger(() => {
-    // Keep BIOS splash on screen for 1800ms after messages complete
-    setTimeout(() => {
-      // Hide BIOS splash after delay
-      biosScreen.style.display = 'none';
-
-      // Show Windows logo loading screen
-      logoScreen.style.display = 'flex';
-
-      // Animate progress bar fill (optional)
-      const loadingBar = document.getElementById('loading-progress');
-      if (loadingBar) {
-        loadingBar.style.width = '0';
-        setTimeout(() => { loadingBar.style.width = '100%'; }, 50);
-      }
-
-      // After Windows loading screen duration, show login and hide overlay
-      setTimeout(() => {
-        logoScreen.style.display = 'none';
-        loginScreen.style.display = 'flex';
-        bootupOverlay.style.display = 'none';
-        document.body.style.overflow = '';
-      }, 2500);
-
-    }, 1800);
-  });
-};
-
-
-let biosActive = false;
-
-function showBiosTab(tab) {
-  const tabs = ['main','advanced','boot','security','exit'];
-  tabs.forEach(t => {
-    document.getElementById('bios-tab-content-' + t).style.display = (t === tab) ? '' : 'none';
-    document.getElementById('bios-tab-' + t).classList.toggle('active', t === tab);
-  });
-}
-
-document.addEventListener('keydown', function(e) {
-  const biosScreen = document.getElementById('bios-screen');
-  const overlay = document.getElementById('bootup-overlay');
-  if (
-    e.key === "Delete" &&
-    biosScreen &&
-    overlay &&
-    biosScreen.style.display !== "none" &&
-    overlay.style.display !== "none"
-  ) {
-    document.getElementById('bios-popup').style.display = "block";
-    const now = new Date();
-    document.getElementById('bios-time').textContent = now.toLocaleTimeString();
-    document.getElementById('bios-date').textContent = now.toLocaleDateString();
-    overlay.style.display = "none";
-    biosActive = true;
-    showBiosTab('main');
-    e.preventDefault();
-    return;
-  }
-  if (e.key === "Escape" && document.getElementById('bios-popup').style.display === "block") {
-    closeBios();
-    e.preventDefault();
-  }
-});
-
-function closeBios() {
-  document.getElementById('bios-popup').style.display = "none";
-  document.getElementById('bootup-overlay').style.display = "flex";
-  document.getElementById('bios-screen').style.display = "flex";
-  document.getElementById('windows-logo-screen').style.display = "none";
-  document.getElementById('login-screen').style.display = "none";
-  biosActive = false;
-  setTimeout(() => {
-    document.getElementById('bios-screen').style.display = "none";
-    document.getElementById('windows-logo-screen').style.display = "flex";
-    setTimeout(() => {
-      document.getElementById('windows-logo-screen').style.display = "none";
-      document.getElementById('login-screen').style.display = "flex";
-      document.getElementById('bootup-overlay').style.display = "none";
-    }, 2500);
-  }, 1800);
-}
-
-function checkLogin() {
-  const passwd = document.getElementById('login-password').value;
-  const errorDiv = document.getElementById('login-error');
-  if (passwd === 'sagnik') {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('bootup-overlay').style.display = 'none';
-    errorDiv.textContent = '';
-  } else {
-    errorDiv.textContent = 'Incorrect password!';
-  }
-}
-</script>
-
-<script src="script.js"></script>
-
+  <!-- =======================================================================
+       SCRIPTS
+       ======================================================================= -->
+  <script src="minesweeper.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

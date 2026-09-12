@@ -1,69 +1,59 @@
-# Windows 99 Portfolio Website
+# 💾 Windows 98 Portfolio — Sagnik Datta
 
-A unique, interactive personal portfolio website designed with a nostalgic Windows 9x/XP desktop aesthetic. This project transforms a standard resume into a fun, retro computing experience.
+A nostalgic, retro personal portfolio website designed and styled in the iconic aesthetic of **Windows 98**, built with vanilla HTML, CSS, JavaScript, and [`98.css`](https://jdan.github.io/98.css/).
 
-![Project Screenshot](./assets/image.png)
+---
 
-## 📖 About The Project
+## 🖥️ Live Experience & Features
 
-This project is a frontend portfolio website that mimicks the look and feel of a classic Windows operating system. The iconic "Bliss" wallpaper combined with a retro taskbar and pixelated icons provides an engaging way for visitors to explore my professional background.
+* **⚡ Fast Retro Bootup & BIOS Simulation:**
+  * Authentic green-phosphor BIOS POST sequence (with a nostalgic pause).
+  * **Interactive BIOS Setup Utility:** Press `DEL` during boot to enter the fully interactive ROM BIOS utility with *Main*, *Advanced*, *Boot*, *Security*, and *Exit* tabs.
+  * Windows 98 loading bar and user authentication login card.
+* **🪟 Authentic Window Manager:**
+  * Fully draggable via Pointer Events (works smoothly on both desktop mouse and mobile touch devices).
+  * Native resizable windows with scrollable viewport bodies.
+  * Windows 98 active/inactive title bar gradient states (`#000080` navy active vs. `#808080` grey inactive).
+  * Minimize, Maximize (edge-to-edge full screen), and Close controls with taskbar synchronization.
+* **📋 Categorized Skills Window:**
+  * Organized across 5 Windows 98 fieldsets with high-legibility antialiased typography:
+    * **Programming Languages:** Python, C++, TypeScript, JavaScript (ES6+), SQL (Oracle/PostgreSQL), C, HTML5, CSS3
+    * **Frameworks & Libraries:** React.js, Next.js, Node.js, Express.js, FastAPI, Prisma ORM, WebSockets, Tailwind CSS, Streamlit
+    * **AI, ML & Data Systems:** Local LLMs (LLaMA 3, Ollama), Retrieval-Augmented Generation (RAG), Vector Embeddings, NLP, Prompt Engineering
+    * **Cloud, DevOps & Databases:** Oracle Cloud Infrastructure (OCI), Oracle Database, Docker, Kubernetes, CI/CD Pipelines, PostgreSQL, Git, Linux/Bash
+    * **Engineering Methodologies:** Agile, Scrum, Test-Driven Development (TDD), Unit Testing, Root-Cause Debugging, System Design, REST APIs, UML
+* **💣 Authentic Windows 98 Minesweeper:**
+  * Complete gameplay with Beginner (9x9), Intermediate (16x16), and Expert (16x30) difficulty levels.
+  * 7-segment digital timer, remaining mine counter, interactive smiley face, and authentic number color schemes.
+* **📄 In-Window PDF Resume Viewer:**
+  * Responsive PDF viewer that dynamically scales on window resize and maximization.
+  * Direct download button for offline viewing.
+* **📻 Synthesized Retro Audio:**
+  * Zero-overhead sound effects using the Web Audio API (startup chime, window clicks, error beeps) with a system tray mute toggle (`🔊` / `🔇`).
+* **📺 CRT Monitor Scanline Filter:**
+  * Toggleable CRT phosphor/scanline overlay (`📺`) simulating a vintage curved CRT monitor.
+* **🖱️ Desktop Context Menu:**
+  * Classic Windows 98 right-click context menu (*Arrange Icons*, *Refresh*, *Toggle CRT Scanlines*, *Toggle Audio*, *Properties*).
 
-Instead of standard navigation bars, users interact with desktop icons to "launch" different sections of my portfolio.
+---
 
-### Key Features
+## 🚀 Performance & Lightweight Architecture
 
-* **Retro Interface:** Authentic classic Windows taskbar, start menu button, and desktop environment.
-* **Interactive Navigation:** Desktop icons serve as links to resume sections.
-* **Sections Included:**
-    * 📄 About Me
-    * 💼 Resume
-    * 📞 Contacts
-    * 🛠️ Skills
-    * 📜 Certifications
-    * 💣 Minesweeper (Interactive game element)
+* Over **90% asset weight reduction** (<300 KB total image bundle) for instantaneous page loading.
+* Zero external JavaScript dependencies or heavy frameworks.
+* Clean separation of concerns between structure (`index.html`), presentation (`style.css`), and logic (`script.js`, `minesweeper.js`).
 
-## 🛠️ Built With
+---
 
-This project uses modern web technologies to recreate a vintage feel.
+## 👤 Author & Contact
 
-* [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5)
-* [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
-* [![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+* **Developer:** Sagnik Datta
+* **GitHub:** [@armoredglock](https://github.com/armoredglock)
+* **LinkedIn:** [sagnik-dattta-coder](https://www.linkedin.com/in/sagnik-dattta-coder/)
+* **Email:** [sagnik.datta111@gmail.com](mailto:sagnik.datta111@gmail.com)
 
-## 💻 Getting Started
-
-To run this project locally on your machine, follow these steps.
-
-### Prerequisites
-
-Make sure you have Node.js installed to manage dependencies.
-
-### Installation
-
-1.  **Clone the repository**
-    ```bash
-    git clone [https://github.com/sagnikdatta2k6/WIN98-PORTFOLIO.git](https://github.com/sagnikdatta2k6/WIN98-PORTFOLIO.git)
-    ```
-2.  **Navigate into the project directory**
-    ```bash
-    cd WIN98-PORTFOLIO
-    ```
-3.  **Install dependencies (Tailwind CSS)**
-    ```bash
-    npm install
-    ```
-4.  Open the `index.html` file in your browser to view the site.
-
-## 🖱️ Usage
-
-Simply click on the desktop icons just as you would on a real computer to navigate through the different sections of the portfolio.
+---
 
 ## 📄 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## 📮 Contact
-
-Sagnik Datta - sagnik.datta111@gmail.com
-
-Project Link: [https://github.com/sagnikdatta2k6/WIN98-PORTFOLIO](https://github.com/sagnikdatta2k6/WIN98-PORTFOLIO)
+This project is open-source under the [MIT License](LICENSE).
