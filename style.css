@@ -347,6 +347,12 @@ body.booting #active-desktop-container {
   display: none !important;
 }
 
+#active-desktop-container button {
+  min-width: unset !important;
+  min-height: unset !important;
+  box-shadow: none !important;
+}
+
 .active-widget {
   pointer-events: auto;
   position: absolute;
@@ -367,40 +373,53 @@ body.booting #active-desktop-container {
 .channel-bar-header {
   background: linear-gradient(90deg, #111111, #444444);
   color: #ffffff;
-  padding: 4px 6px;
+  padding: 3px 6px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #555555;
+  height: 22px;
+  box-sizing: border-box;
 }
 
 .channel-bar-title {
   font-family: 'Times New Roman', serif;
   font-style: italic;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
   letter-spacing: 0.5px;
   text-shadow: 1px 1px 2px #000;
+  line-height: 1;
 }
 
 .channel-bar-controls {
   display: flex;
-  gap: 2px;
+  gap: 3px;
+  align-items: center;
 }
 
 .channel-ctrl-btn {
-  background: #c0c0c0;
-  border: 1px outset #fff;
-  font-family: 'MS Sans Serif', Arial, sans-serif;
-  font-size: 9px;
-  font-weight: bold;
-  padding: 0 4px;
-  line-height: 12px;
-  cursor: pointer;
+  min-width: unset !important;
+  min-height: unset !important;
+  width: 14px !important;
+  height: 14px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #c0c0c0 !important;
+  border: 1px outset #ffffff !important;
+  font-family: 'MS Sans Serif', Arial, sans-serif !important;
+  font-size: 9px !important;
+  font-weight: bold !important;
+  line-height: 11px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
 }
 
 .channel-ctrl-btn:active {
-  border: 1px inset #888;
+  border: 1px inset #808080 !important;
 }
 
 .channel-bar-body {
@@ -462,12 +481,14 @@ body.booting #active-desktop-container {
 .active-box-header {
   background: linear-gradient(90deg, #000080, #1084d0);
   color: #ffffff;
-  padding: 3px 5px;
+  padding: 3px 6px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 11px;
   font-weight: bold;
+  height: 22px;
+  box-sizing: border-box;
 }
 
 .active-box-title {
@@ -486,17 +507,26 @@ body.booting #active-desktop-container {
 }
 
 .active-box-close {
-  background: #c0c0c0;
-  border: 1px outset #ffffff;
-  font-size: 9px;
-  font-weight: bold;
-  padding: 0 4px;
-  cursor: pointer;
-  line-height: 12px;
+  min-width: unset !important;
+  min-height: unset !important;
+  width: 14px !important;
+  height: 14px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #c0c0c0 !important;
+  border: 1px outset #ffffff !important;
+  font-size: 9px !important;
+  font-weight: bold !important;
+  line-height: 11px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
 }
 
 .active-box-close:active {
-  border: 1px inset #888;
+  border: 1px inset #808080 !important;
 }
 
 .active-box-body {
@@ -731,16 +761,26 @@ body.booting #active-desktop-container {
 }
 
 .tip-close-btn {
-  background: none;
-  border: none;
-  font-size: 9px;
-  cursor: pointer;
-  color: #887700;
-  font-weight: bold;
+  min-width: unset !important;
+  min-height: unset !important;
+  width: 14px !important;
+  height: 14px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: none !important;
+  border: none !important;
+  font-size: 10px !important;
+  cursor: pointer !important;
+  color: #887700 !important;
+  font-weight: bold !important;
+  line-height: 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .tip-close-btn:hover {
-  color: #000;
+  color: #000 !important;
 }
 
 .tip-note-content {
@@ -757,17 +797,19 @@ body.booting #active-desktop-container {
 }
 
 .tip-cycle-btn {
-  background: #f7f0b8;
-  border: 1px outset #fff;
-  font-size: 10px;
-  font-weight: bold;
-  padding: 2px 8px;
-  cursor: pointer;
-  color: #443300;
+  min-width: unset !important;
+  min-height: unset !important;
+  background: #f7f0b8 !important;
+  border: 1px outset #ffffff !important;
+  font-size: 10px !important;
+  font-weight: bold !important;
+  padding: 2px 8px !important;
+  cursor: pointer !important;
+  color: #443300 !important;
 }
 
 .tip-cycle-btn:active {
-  border: 1px inset #888;
+  border: 1px inset #808080 !important;
 }
 
 /* ==========================================================================
