@@ -26,24 +26,117 @@
   <link rel="stylesheet" href="https://unpkg.com/98.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="desktop">
+<body class="desktop booting">
 
   <!-- =======================================================================
-       MOBILE RETRO STATUS BAR (Visible only on mobile screens)
+       MOBILE RETRO STATUS BAR (Droppable Notification Bar)
        ======================================================================= -->
-  <header id="mobile-status-bar" role="banner">
+  <header id="mobile-status-bar" role="banner" onclick="toggleNotificationCenter()" title="Tap or swipe down for notifications &amp; controls">
     <div class="mobile-status-left">
       <span class="mobile-signal">📶</span>
       <span class="mobile-carrier">Win98 4G</span>
     </div>
     <div class="mobile-status-center">
       <span id="mobile-clock">12:00 PM</span>
+      <span class="mobile-notif-arrow">⌄</span>
     </div>
     <div class="mobile-status-right">
-      <span class="mobile-sound-icon" onclick="toggleAudio()" title="Sound Toggle">🔊</span>
+      <span class="mobile-sound-icon" onclick="event.stopPropagation(); toggleAudio();">🔊</span>
       <span class="mobile-battery">🔋 98%</span>
     </div>
   </header>
+
+  <!-- =======================================================================
+       MOBILE NOTIFICATION SHADE & CONTROL CENTER (DROPPABLE FROM TOP)
+       ======================================================================= -->
+  <div id="mobile-notification-center" role="dialog" aria-modal="true" aria-label="Control &amp; Notifications">
+    <div class="notif-center-header">
+      <div class="notif-center-title">
+        <span>Win98 Control &amp; Notifications</span>
+      </div>
+      <button class="notif-close-btn" onclick="closeNotificationCenter()" aria-label="Close">▲</button>
+    </div>
+
+    <!-- Quick Control Center Toggles -->
+    <div class="control-center-grid">
+      <div class="control-card active" id="ctrl-wifi" onclick="toggleWiFi()">
+        <span class="ctrl-icon">📶</span>
+        <span class="ctrl-label">VIT-WiFi</span>
+        <small class="ctrl-sub">Connected</small>
+      </div>
+      <div class="control-card" id="ctrl-crt" onclick="toggleCRT(); updateControlCenterUI();">
+        <span class="ctrl-icon">📺</span>
+        <span class="ctrl-label">CRT Mode</span>
+        <small class="ctrl-sub" id="ctrl-crt-sub">Off</small>
+      </div>
+      <div class="control-card active" id="ctrl-audio" onclick="toggleAudio(); updateControlCenterUI();">
+        <span class="ctrl-icon">🔊</span>
+        <span class="ctrl-label">Audio FX</span>
+        <small class="ctrl-sub" id="ctrl-audio-sub">On</small>
+      </div>
+      <div class="control-card" id="ctrl-reboot" onclick="rebootPC(); closeNotificationCenter();">
+        <span class="ctrl-icon">🔄</span>
+        <span class="ctrl-label">Restart</span>
+        <small class="ctrl-sub">Reboot</small>
+      </div>
+    </div>
+
+    <!-- Notifications Section -->
+    <div class="notifications-section">
+      <div class="notif-section-header">
+        <span>System &amp; Career Alerts</span>
+        <button class="notif-clear-btn" onclick="clearNotifications()">Clear</button>
+      </div>
+      <div class="notif-list" id="notif-list">
+        <div class="notif-item">
+          <img src="assets/my-computer.png" alt="" class="notif-app-icon" />
+          <div class="notif-body">
+            <div class="notif-top">
+              <strong>System Online</strong>
+              <small>Just now</small>
+            </div>
+            <p>Windows 98 Mobile Edition running smoothly. All services operational.</p>
+          </div>
+        </div>
+        <div class="notif-item" onclick="openWindow('skills'); closeNotificationCenter();">
+          <img src="assets/skills.png" alt="" class="notif-app-icon" />
+          <div class="notif-body">
+            <div class="notif-top">
+              <strong>Career Status &bull; Looking for Roles</strong>
+              <small>2m ago</small>
+            </div>
+            <p>Actively open for Software Engineering &amp; AI / ML Intern roles. Tap to view skills.</p>
+          </div>
+        </div>
+        <div class="notif-item" onclick="openWindow('aboutMe'); closeNotificationCenter();">
+          <img src="assets/user.jpg" alt="" class="notif-app-icon" />
+          <div class="notif-body">
+            <div class="notif-top">
+              <strong>Academic Profile &bull; VIT Vellore</strong>
+              <small>10m ago</small>
+            </div>
+            <p>B.Tech CSE (Internet of Things) undergraduate. Class of 2028.</p>
+          </div>
+        </div>
+        <div class="notif-item" onclick="openWindow('resume'); closeNotificationCenter();">
+          <img src="assets/resume.png" alt="" class="notif-app-icon" />
+          <div class="notif-body">
+            <div class="notif-top">
+              <strong>Resume Updated</strong>
+              <small>Today</small>
+            </div>
+            <p>Latest resume with Skyscanner simulation uploaded. Tap to view PDF.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pull-up Handle -->
+    <div class="notif-pull-handle" onclick="closeNotificationCenter()">
+      <div class="drawer-pill"></div>
+      <span>▲ Tap to close shade</span>
+    </div>
+  </div>
 
   <!-- =======================================================================
        BIOS SETUP UTILITY (EASTER EGG - PRESS 'DELETE' DURING BOOT)
@@ -543,6 +636,24 @@
   </div>
 
   <!-- =======================================================================
+       MOBILE RECENT TABS SWITCHER (MULTITASKING OVERVIEW)
+       ======================================================================= -->
+  <div id="mobile-tabs-switcher" role="dialog" aria-modal="true" aria-label="Running Applications">
+    <div class="tabs-switcher-header">
+      <div class="tabs-switcher-title">
+        <span>Running Tabs</span>
+      </div>
+      <div class="tabs-switcher-actions">
+        <button class="tabs-close-all-btn" onclick="closeAllTabs()">Close All</button>
+        <button class="tabs-exit-btn" onclick="closeTabsSwitcher()" aria-label="Close">✕</button>
+      </div>
+    </div>
+    <div class="tabs-switcher-body" id="tabs-switcher-list">
+      <!-- Dynamically generated open tabs cards -->
+    </div>
+  </div>
+
+  <!-- =======================================================================
        MOBILE BOTTOM NAVIGATION BAR
        ======================================================================= -->
   <nav id="mobile-nav-bar" role="navigation" aria-label="Mobile Navigation">
@@ -554,9 +665,9 @@
       <span class="nav-icon">⌂</span>
       <span class="nav-label">Home</span>
     </button>
-    <button class="mobile-nav-btn" onclick="toggleAppDrawer()" title="App Drawer" aria-label="App Drawer">
-      <span class="nav-icon">▲</span>
-      <span class="nav-label">Apps</span>
+    <button class="mobile-nav-btn" id="mobile-tabs-btn" onclick="toggleTabsSwitcher()" title="Active Tabs" aria-label="Active Tabs">
+      <span class="nav-icon">▢</span>
+      <span class="nav-label" id="mobile-tabs-label">Tabs (0)</span>
     </button>
   </nav>
 

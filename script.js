@@ -279,15 +279,18 @@ function initWindowDragging() {
 
 function updateTaskbar() {
   const taskbar = document.getElementById('taskbar-windows');
-  if (!taskbar) return;
-  taskbar.innerHTML = '';
+  if (taskbar) taskbar.innerHTML = '';
 
+  let openCount = 0;
   windowOrder.forEach(id => {
     const win = document.getElementById(id);
     if (!win) return;
 
     const isOpen = win.style.display !== 'none' || minimizedWindows[id];
     if (isOpen) {
+      openCount++;
+      if (!taskbar) return;
+
       const btn = document.createElement('button');
       btn.className = 'taskbar-window-btn';
       
@@ -324,6 +327,16 @@ function updateTaskbar() {
       taskbar.appendChild(btn);
     }
   });
+
+  const mobileTabsLabel = document.getElementById('mobile-tabs-label');
+  if (mobileTabsLabel) {
+    mobileTabsLabel.textContent = `Tabs (${openCount})`;
+  }
+
+  const switcher = document.getElementById('mobile-tabs-switcher');
+  if (switcher && switcher.classList.contains('open')) {
+    renderTabsSwitcher();
+  }
 }
 
 function updateClock() {
@@ -387,6 +400,7 @@ window.addEventListener('click', (e) => {
 
 function startBootSequence() {
   document.body.style.overflow = "hidden";
+  document.body.classList.add('booting');
 
   const bootupOverlay = document.getElementById('bootup-overlay');
   const biosScreen = document.getElementById('bios-screen');
@@ -440,6 +454,7 @@ function checkLogin() {
     const overlay = document.getElementById('bootup-overlay');
     if (overlay) overlay.style.display = 'none';
     document.body.style.overflow = '';
+    document.body.classList.remove('booting');
     if (errorDiv) errorDiv.textContent = '';
     playBootChime();
     // Initially all windows stay closed as requested
@@ -453,21 +468,35 @@ function checkLogin() {
 
 function rebootPC() {
   closeStartMenu();
+  closeNotificationCenter();
+  closeTabsSwitcher();
+  closeAppDrawer();
+
   // Close all open windows
   windowOrder.forEach(id => {
     const w = document.getElementById(id);
     if (w) w.style.display = 'none';
     minimizedWindows[id] = false;
   });
+  activeWindowId = null;
   updateTaskbar();
 
+  document.body.classList.add('booting');
   const overlay = document.getElementById('bootup-overlay');
   if (overlay) overlay.style.display = 'flex';
+  const passInput = document.getElementById('login-password');
+  if (passInput) passInput.value = '';
+
   startBootSequence();
 }
 
 function lockPC() {
   closeStartMenu();
+  closeNotificationCenter();
+  closeTabsSwitcher();
+  closeAppDrawer();
+
+  document.body.classList.add('booting');
   const overlay = document.getElementById('bootup-overlay');
   const biosScreen = document.getElementById('bios-screen');
   const logoScreen = document.getElementById('windows-logo-screen');
@@ -643,12 +672,15 @@ function initDesktopIcons() {
 }
 
 /* ==========================================================================
-   MOBILE OS: TOUCH GESTURES, APP DRAWER & NAVIGATION
+   MOBILE OS: TOUCH GESTURES, APP DRAWER, NOTIFICATION SHADE & RECENT TABS
    ========================================================================== */
 
+/* 1. App Drawer */
 function openAppDrawer() {
   const drawer = document.getElementById('mobile-app-drawer');
   if (drawer) {
+    closeNotificationCenter();
+    closeTabsSwitcher();
     drawer.classList.add('open');
     playClickSound();
   }
@@ -684,8 +716,185 @@ function filterDrawerApps(query) {
   });
 }
 
+/* 2. Droppable Notification Shade & Control Center */
+function toggleNotificationCenter() {
+  const shade = document.getElementById('mobile-notification-center');
+  if (!shade) return;
+  const isOpen = shade.classList.contains('open');
+  if (isOpen) {
+    closeNotificationCenter();
+  } else {
+    openNotificationCenter();
+  }
+}
+
+function openNotificationCenter() {
+  const shade = document.getElementById('mobile-notification-center');
+  if (!shade) return;
+  closeAppDrawer();
+  closeTabsSwitcher();
+  shade.classList.add('open');
+  updateControlCenterUI();
+  playClickSound();
+}
+
+function closeNotificationCenter() {
+  const shade = document.getElementById('mobile-notification-center');
+  if (shade) {
+    shade.classList.remove('open');
+  }
+}
+
+let wifiConnected = true;
+function toggleWiFi() {
+  wifiConnected = !wifiConnected;
+  const card = document.getElementById('ctrl-wifi');
+  const carrier = document.querySelector('.mobile-carrier');
+  if (card) {
+    card.classList.toggle('active', wifiConnected);
+    const sub = card.querySelector('.ctrl-sub');
+    if (sub) sub.textContent = wifiConnected ? 'Connected' : 'Disconnected';
+  }
+  if (carrier) {
+    carrier.textContent = wifiConnected ? 'Win98 4G' : 'No Service';
+  }
+  playClickSound();
+}
+
+function updateControlCenterUI() {
+  const crtCard = document.getElementById('ctrl-crt');
+  const crtSub = document.getElementById('ctrl-crt-sub');
+  const isCrt = document.body.classList.contains('crt-mode');
+  if (crtCard) crtCard.classList.toggle('active', isCrt);
+  if (crtSub) crtSub.textContent = isCrt ? 'On' : 'Off';
+
+  const audioCard = document.getElementById('ctrl-audio');
+  const audioSub = document.getElementById('ctrl-audio-sub');
+  if (audioCard) audioCard.classList.toggle('active', soundEnabled);
+  if (audioSub) audioSub.textContent = soundEnabled ? 'On' : 'Mute';
+}
+
+function clearNotifications() {
+  const list = document.getElementById('notif-list');
+  if (list) {
+    list.innerHTML = `
+      <div class="notif-item" style="justify-content:center; color:#666; font-style:italic; padding: 14px;">
+        <span>No new notifications</span>
+      </div>
+    `;
+    playClickSound();
+  }
+}
+
+/* 3. Recent Tabs Switcher (Multitasking Overview) */
+function toggleTabsSwitcher() {
+  const switcher = document.getElementById('mobile-tabs-switcher');
+  if (!switcher) return;
+  const isOpen = switcher.classList.contains('open');
+  if (isOpen) {
+    closeTabsSwitcher();
+  } else {
+    openTabsSwitcher();
+  }
+}
+
+function openTabsSwitcher() {
+  const switcher = document.getElementById('mobile-tabs-switcher');
+  if (!switcher) return;
+  closeNotificationCenter();
+  closeAppDrawer();
+  renderTabsSwitcher();
+  switcher.classList.add('open');
+  playClickSound();
+}
+
+function closeTabsSwitcher() {
+  const switcher = document.getElementById('mobile-tabs-switcher');
+  if (switcher) {
+    switcher.classList.remove('open');
+  }
+}
+
+function renderTabsSwitcher() {
+  const container = document.getElementById('tabs-switcher-list');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const openIds = windowOrder.filter(id => {
+    const win = document.getElementById(id);
+    return win && (win.style.display !== 'none' || minimizedWindows[id]);
+  });
+
+  if (openIds.length === 0) {
+    container.innerHTML = `
+      <div class="tabs-empty-state">
+        <h4>No Open Tabs</h4>
+        <p>You have no active running applications.<br>Open an app from the home screen or app drawer.</p>
+      </div>
+    `;
+    return;
+  }
+
+  openIds.forEach(id => {
+    const win = document.getElementById(id);
+    const titleBarText = win.querySelector('.title-bar-text');
+    const title = titleBarText ? titleBarText.textContent : id;
+    const icon = windowIcons[id] || 'assets/my-computer.png';
+    const isActive = (activeWindowId === id && !minimizedWindows[id]);
+
+    const card = document.createElement('div');
+    card.className = 'tab-card';
+
+    card.innerHTML = `
+      <div class="tab-card-header ${isActive ? '' : 'inactive'}">
+        <div class="tab-card-title">
+          <img src="${icon}" alt="" />
+          <span>${title}</span>
+        </div>
+        <button class="tab-card-close" onclick="event.stopPropagation(); closeWindow('${id}');" aria-label="Close tab">✕</button>
+      </div>
+      <div class="tab-card-preview" onclick="switchToTab('${id}')">
+        <img src="${icon}" alt="" />
+        <span>${title}</span>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+function switchToTab(id) {
+  closeTabsSwitcher();
+  const win = document.getElementById(id);
+  if (!win) return;
+  win.style.display = 'flex';
+  win.classList.remove('minimized');
+  minimizedWindows[id] = false;
+  bringToFront(id);
+  updateTaskbar();
+  playClickSound();
+}
+
+function closeAllTabs() {
+  windowOrder.forEach(id => {
+    const win = document.getElementById(id);
+    if (win) {
+      win.style.display = 'none';
+      win.classList.remove('maximized');
+      minimizedWindows[id] = false;
+    }
+  });
+  activeWindowId = null;
+  updateTaskbar();
+  renderTabsSwitcher();
+  playClickSound();
+}
+
+/* 4. Bottom Nav Actions */
 function goHome() {
   closeAppDrawer();
+  closeNotificationCenter();
+  closeTabsSwitcher();
   windowOrder.forEach(id => {
     const w = document.getElementById(id);
     if (w) w.style.display = 'none';
@@ -697,6 +906,18 @@ function goHome() {
 }
 
 function goBack() {
+  const shade = document.getElementById('mobile-notification-center');
+  if (shade && shade.classList.contains('open')) {
+    closeNotificationCenter();
+    playClickSound();
+    return;
+  }
+  const switcher = document.getElementById('mobile-tabs-switcher');
+  if (switcher && switcher.classList.contains('open')) {
+    closeTabsSwitcher();
+    playClickSound();
+    return;
+  }
   const drawer = document.getElementById('mobile-app-drawer');
   if (drawer && drawer.classList.contains('open')) {
     closeAppDrawer();
@@ -710,6 +931,7 @@ function goBack() {
   }
 }
 
+/* 5. Mobile Gesture Recognition */
 function initMobileGestures() {
   let touchStartY = 0;
   let touchStartX = 0;
@@ -734,21 +956,34 @@ function initMobileGestures() {
       const diffY = touchStartY - touchEndY;
       const diffX = Math.abs(touchStartX - touchEndX);
 
-      // Verify predominantly vertical swipe
-      if (Math.abs(diffY) > 50 && Math.abs(diffY) > diffX) {
-        if (diffY > 50) {
-          // Swipe UP - Open drawer if touch started from lower 65% of screen
+      // Predominantly vertical swipe
+      if (Math.abs(diffY) > 40 && Math.abs(diffY) > diffX) {
+        if (diffY < -40) {
+          // Swipe DOWN
+          // If swipe starts from top 25% of screen, drop notification center
+          if (touchStartY < window.innerHeight * 0.25) {
+            openNotificationCenter();
+          } else {
+            // Otherwise, if drawer is open, close drawer
+            const drawer = document.getElementById('mobile-app-drawer');
+            if (drawer && drawer.classList.contains('open')) {
+              closeAppDrawer();
+            }
+          }
+        } else if (diffY > 40) {
+          // Swipe UP
+          const shade = document.getElementById('mobile-notification-center');
+          if (shade && shade.classList.contains('open')) {
+            closeNotificationCenter();
+            return;
+          }
+
+          // Open drawer if touch started from lower 65% of screen
           const drawer = document.getElementById('mobile-app-drawer');
           if (drawer && !drawer.classList.contains('open')) {
             if (touchStartY > window.innerHeight * 0.35) {
               openAppDrawer();
             }
-          }
-        } else if (diffY < -50) {
-          // Swipe DOWN - Close drawer
-          const drawer = document.getElementById('mobile-app-drawer');
-          if (drawer && drawer.classList.contains('open')) {
-            closeAppDrawer();
           }
         }
       }
